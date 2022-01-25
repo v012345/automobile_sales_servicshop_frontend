@@ -303,25 +303,36 @@ export default {
       });
     },
     test() {
-      if (!localStorage.myId) {
-        if (!localStorage.temporaryId) {
-          localStorage.temporaryId = this.$uuid.v1();
-          //生成临时id,生成授权回调地址.
-          this.axios
-            .get(this.$api + "users/temporary_id/" + localStorage.temporaryId)
-            .then((response) => {
-              window.location.href = response.data;
-            });
-        } else {
-          this.axios
-            .post(this.$api + "login", {
-              temporaryId: localStorage.temporaryId,
-            })
-            .then((response) => {
-              console.log(response.data);
-            });
-        }
-      }
+      localStorage.temporaryId = this.$uuid.v1();
+      //生成临时id,生成授权回调地址.
+      console.log(localStorage.temporaryId);
+      this.axios
+        .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
+        .then((response) => {
+          console.log(response.data);
+          // window.location.href = response.data;
+        });
+      // console.log(localStorage.myId);
+      // if (!localStorage.myId) {
+      //   console.log(localStorage.temporaryId);
+      //   if (!localStorage.temporaryId) {
+      //     localStorage.temporaryId = this.$uuid.v1();
+      //     //生成临时id,生成授权回调地址.
+      //     this.axios
+      //       .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
+      //       .then((response) => {
+      //         window.location.href = response.data;
+      //       });
+      //   } else {
+      //     // this.axios
+      //     //   .post(this.$api + "login", {
+      //     //     temporaryId: localStorage.temporaryId,
+      //     //   })
+      //     //   .then((response) => {
+      //     //     console.log(response.data);
+      //     //   });
+      //   }
+      // }
     },
     dealWithTheCoupon() {},
     showMyCoupons() {
@@ -340,22 +351,29 @@ export default {
     },
   },
   mounted() {
-    this.wx.config({
-      debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-      appId: "",
-      timestamp: "",
-      nonceStr: "",
-      signature: "",
-      jsApiList: [
-        "checkJsApi",
-        "onMenuShareTimeline",
-        "onMenuShareAppMessage",
-        "hideAllNonBaseMenuItem",
-        "showAllNonBaseMenuItem",
-        "scanQRCode",
-        "openLocation",
-      ],
-    });
+    this.axios
+      .get("http://amap.100pq.cn/laravel/api/wechat/jssdk")
+      .then((response) => {
+        this.wx.config({
+          ...response.data,
+        });
+      });
+    // this.wx.config({
+    //   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    //   appId: "",
+    //   timestamp: "",
+    //   nonceStr: "",
+    //   signature: "",
+    //   jsApiList: [
+    //     "checkJsApi",
+    //     "onMenuShareTimeline",
+    //     "onMenuShareAppMessage",
+    //     "hideAllNonBaseMenuItem",
+    //     "showAllNonBaseMenuItem",
+    //     "scanQRCode",
+    //     "openLocation",
+    //   ],
+    // });
   },
   components: {
     // HelloWorld,

@@ -6,6 +6,7 @@ import Home from '../components/Home'
 
 //创建并暴露一个路由器
 export default new VueRouter({
+	mode: 'history',
 	routes: [
 		{
 			path: '/about',

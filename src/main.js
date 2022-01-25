@@ -23,8 +23,8 @@ new Vue({
     Vue.prototype.$bus = this;
     Vue.prototype.wx = wx;
     Vue.prototype.$dayjs = dayjs;
-    // Vue.prototype.$api = "http://amap.100pq.cn/api/";
-    Vue.prototype.$api = "http://192.168.31.84/api/";
+    Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
+    // Vue.prototype.$api = "http://192.168.31.84/api/";
   },
   mounted() {
 
