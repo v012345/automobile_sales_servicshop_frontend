@@ -236,6 +236,8 @@
         </van-tabs>
       </van-popup>
     </div>
+    <van-button type="primary" @click="test">Primary</van-button>
+    <van-button type="primary" @click="test1">test</van-button>
   </div>
 </template>
 
@@ -294,6 +296,33 @@ export default {
     };
   },
   methods: {
+    test1() {
+      this.axios.post(this.$api + "posters/test").then((response) => {
+        this.poster.src = response.data;
+        this.poster.show = true;
+      });
+    },
+    test() {
+      if (!localStorage.myId) {
+        if (!localStorage.temporaryId) {
+          localStorage.temporaryId = this.$uuid.v1();
+          //生成临时id,生成授权回调地址.
+          this.axios
+            .get(this.$api + "users/temporary_id/" + localStorage.temporaryId)
+            .then((response) => {
+              window.location.href = response.data;
+            });
+        } else {
+          this.axios
+            .post(this.$api + "login", {
+              temporaryId: localStorage.temporaryId,
+            })
+            .then((response) => {
+              console.log(response.data);
+            });
+        }
+      }
+    },
     dealWithTheCoupon() {},
     showMyCoupons() {
       this.myCoupons.show = true;

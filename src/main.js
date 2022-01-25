@@ -9,8 +9,11 @@ import router from './router'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import wx from 'weixin-js-sdk';
-dayjs.extend(relativeTime)
+import UUID from "vue-uuid";
 
+
+dayjs.extend(relativeTime)
+Vue.use(UUID);
 Vue.use(Vant)
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -20,6 +23,8 @@ new Vue({
     Vue.prototype.$bus = this;
     Vue.prototype.wx = wx;
     Vue.prototype.$dayjs = dayjs;
+    // Vue.prototype.$api = "http://amap.100pq.cn/api/";
+    Vue.prototype.$api = "http://192.168.31.84/api/";
   },
   mounted() {
 
