@@ -236,8 +236,6 @@
         </van-tabs>
       </van-popup>
     </div>
-    <van-button type="primary" @click="test">Primary</van-button>
-    <van-button type="primary" @click="test1">test</van-button>
   </div>
 </template>
 
@@ -249,8 +247,9 @@ export default {
   data() {
     return {
       showIntroduction: false,
-
+      user: {},
       activity: {
+        id: 0,
         subscriberCount: 55,
         subscribers: [],
         participantCount: 20,
@@ -302,38 +301,7 @@ export default {
         this.poster.show = true;
       });
     },
-    test() {
-      localStorage.temporaryId = this.$uuid.v1();
-      //生成临时id,生成授权回调地址.
-      console.log(localStorage.temporaryId);
-      this.axios
-        .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
-        .then((response) => {
-          console.log(response.data);
-          // window.location.href = response.data;
-        });
-      // console.log(localStorage.myId);
-      // if (!localStorage.myId) {
-      //   console.log(localStorage.temporaryId);
-      //   if (!localStorage.temporaryId) {
-      //     localStorage.temporaryId = this.$uuid.v1();
-      //     //生成临时id,生成授权回调地址.
-      //     this.axios
-      //       .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
-      //       .then((response) => {
-      //         window.location.href = response.data;
-      //       });
-      //   } else {
-      //     // this.axios
-      //     //   .post(this.$api + "login", {
-      //     //     temporaryId: localStorage.temporaryId,
-      //     //   })
-      //     //   .then((response) => {
-      //     //     console.log(response.data);
-      //     //   });
-      //   }
-      // }
-    },
+
     dealWithTheCoupon() {},
     showMyCoupons() {
       this.myCoupons.show = true;
@@ -359,36 +327,44 @@ export default {
       window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
       localStorage.inviter;
 
-    if (!localStorage.myId) {
-      if (!localStorage.temporaryId) {
-        localStorage.temporaryId = this.$uuid.v1();
-      }
-      console.log(localStorage.temporaryId);
-      this.axios
-        .post(this.$api + "login", {
-          temporaryId: localStorage.temporaryId,
-        })
-        .then((response) => {
-          console.log(response);
-          if (response.status == 204) {
-            this.axios
-              .get(
-                this.$api + "wechat/redirect_uri/" + localStorage.temporaryId
-              )
-              .then((response) => {
-                window.location.href = response.data;
-              });
-          } else if (response.status == 200) {
-            console.log(response.data);
-          }
-        });
+    if (!localStorage.temporaryId) {
+      localStorage.temporaryId = this.$uuid.v1();
     }
+    this.axios
+      .post(this.$api + "login", {
+        temporaryId: localStorage.temporaryId,
+      })
+      .then((response) => {
+        if (response.status == 204) {
+          this.axios
+            .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
+            .then((response) => {
+              window.location.href = response.data;
+            });
+        } else if (response.status == 200) {
+          this.user = response.data;
+          console.log(response.data);
+        }
+      });
 
-    if (localStorage.inviter != "undefined") {
-      console.log(localStorage.inviter);
-    } else {
-      console.log("noooo");
-    }
+    this.axios
+      .get(
+        this.$api +
+          "activity/" +
+          (localStorage.activityId == "undefined" ? 0 : localStorage.activityId)
+      )
+      .then((response) => {
+        console.log(response);
+      });
+
+    this.axios
+      .post(this.$api + "user/activity", {
+        userId: 123,
+        activityId: 321,
+      })
+      .then((r) => {
+        console.log(r.data);
+      });
 
     this.axios
       .get(this.$api + "wechat/jssdk", {
