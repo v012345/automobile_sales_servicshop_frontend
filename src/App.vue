@@ -351,9 +351,15 @@ export default {
     },
   },
   mounted() {
+    // console.log();
     this.axios
-      .get("http://amap.100pq.cn/laravel/api/wechat/jssdk")
+      .get("http://amap.100pq.cn/laravel/api/wechat/jssdk", {
+        params: {
+          url: window.location.href,
+        },
+      })
       .then((response) => {
+        // console.log(response.data);
         this.wx.config({
           ...response.data,
         });
