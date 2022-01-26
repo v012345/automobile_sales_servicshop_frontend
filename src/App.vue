@@ -363,6 +363,7 @@ export default {
       if (!localStorage.temporaryId) {
         localStorage.temporaryId = this.$uuid.v1();
       }
+      console.log(localStorage.temporaryId);
       this.axios
         .post(this.$api + "login", {
           temporaryId: localStorage.temporaryId,
