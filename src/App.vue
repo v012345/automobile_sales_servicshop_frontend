@@ -359,6 +359,20 @@ export default {
           console.log(response.data);
         }
       });
+    this.$wx.ready(() => {
+      //需在用户可能点击分享按钮前就先调用
+      this.$wx.updateAppMessageShareData({
+        title: "title321", // 分享标题
+        desc: "desc123", // 分享描述
+        link: "http://amap.100pq.cn/activity/1/inviter/12", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl:
+          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AUser_icon_2.svg&psig=AOvVaw2H1JS2UmBkgL1TBmSZ3la6&ust=1643260367689000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKi4-4XUzvUCFQAAAAAdAAAAABAD", // 分享图标
+        success: () => {
+          // 设置成功
+          Toast({ message: "updateAppMessageShareData" });
+        },
+      });
+    });
 
     this.axios
       .get(
