@@ -351,35 +351,55 @@ export default {
     },
   },
   mounted() {
-    // console.log();
+    localStorage.activityId =
+      window.location.href.match(/(?<=\/activity\/)(\d+)/g) ||
+      localStorage.activityId;
+
+    localStorage.inviter =
+      window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
+      localStorage.inviter;
+
+    if (!localStorage.myId) {
+      if (!localStorage.temporaryId) {
+        localStorage.temporaryId = this.$uuid.v1();
+      }
+      this.axios
+        .post(this.$api + "login", {
+          temporaryId: localStorage.temporaryId,
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.status == 204) {
+            this.axios
+              .get(
+                this.$api + "wechat/redirect_uri/" + localStorage.temporaryId
+              )
+              .then((response) => {
+                window.location.href = response.data;
+              });
+          } else if (response.status == 200) {
+            console.log(response.data);
+          }
+        });
+    }
+
+    if (localStorage.inviter != "undefined") {
+      console.log(localStorage.inviter);
+    } else {
+      console.log("noooo");
+    }
+
     this.axios
-      .get("http://amap.100pq.cn/laravel/api/wechat/jssdk", {
+      .get(this.$api + "wechat/jssdk", {
         params: {
           url: window.location.href,
         },
       })
       .then((response) => {
-        // console.log(response.data);
         this.wx.config({
           ...response.data,
         });
       });
-    // this.wx.config({
-    //   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-    //   appId: "",
-    //   timestamp: "",
-    //   nonceStr: "",
-    //   signature: "",
-    //   jsApiList: [
-    //     "checkJsApi",
-    //     "onMenuShareTimeline",
-    //     "onMenuShareAppMessage",
-    //     "hideAllNonBaseMenuItem",
-    //     "showAllNonBaseMenuItem",
-    //     "scanQRCode",
-    //     "openLocation",
-    //   ],
-    // });
   },
   components: {
     // HelloWorld,
