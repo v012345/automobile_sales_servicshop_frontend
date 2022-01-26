@@ -99,7 +99,7 @@
       <div @click="showMyCoupons">
         <img src="./assets/myCoupons.jpg" />
       </div>
-      <div>
+      <div @click="scan">
         <img src="./assets/useCoupons.jpg" />
       </div>
     </div>
@@ -242,6 +242,8 @@
 <script>
 // import HelloWorld from "./components/HelloWorld.vue";
 
+import { Toast } from "vant";
+
 export default {
   name: "App",
   data() {
@@ -299,6 +301,17 @@ export default {
       this.axios.post(this.$api + "posters/test").then((response) => {
         this.poster.src = response.data;
         this.poster.show = true;
+      });
+    },
+
+    scan() {
+      this.$wx.scanQRCode({
+        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+        success: (res) => {
+          Toast({ message: res.resultStr });
+          // var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+        },
       });
     },
 
