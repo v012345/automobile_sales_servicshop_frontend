@@ -21,7 +21,7 @@ Vue.use(VueAxios, axios)
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this;
-    Vue.prototype.wx = wx;
+    Vue.prototype.$wx = wx;
     Vue.prototype.$dayjs = dayjs;
     Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
     // Vue.prototype.$api = "http://192.168.31.84/api/";

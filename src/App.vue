@@ -386,7 +386,7 @@ export default {
         },
       })
       .then((response) => {
-        this.wx.config({
+        this.$wx.config({
           ...response.data,
         });
       });
