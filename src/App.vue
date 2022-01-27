@@ -420,7 +420,7 @@ export default {
               temporaryId: localStorage.temporaryId,
             })
             .then((response) => {
-              Toast({ duration: 0, message: response.data });
+              Toast({ duration: 0, message: JSON.stringify(response.data) });
             });
           // var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
         },
