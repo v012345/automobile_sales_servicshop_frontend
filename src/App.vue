@@ -229,7 +229,8 @@
                 :value="coupon.value"
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
-                :state="coupon.state"
+                :description="activity.description"
+                :available="coupon.state == 'available'"
               ></Coupon>
             </div>
           </van-tab>
@@ -243,7 +244,7 @@
                 :value="coupon.value"
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
-                :state="coupon.state"
+                :available="coupon.state == 'available'"
               ></Coupon></div
           ></van-tab>
           <van-tab title="失效的" name="expired">
@@ -252,7 +253,7 @@
                 :value="coupon.value"
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
-                :state="coupon.state"
+                :available="false"
               ></Coupon></div
           ></van-tab>
         </van-tabs>
@@ -410,38 +411,41 @@ export default {
 
     scan() {
       //注意角色权限
-      this.$wx.scanQRCode({
-        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-        // scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-        success: (res) => {
-          // Toast({ message: res.resultStr });
-          this.axios
-            .put(this.$api + `coupon/${res.resultStr}/use`, {
-              temporaryId: localStorage.temporaryId,
-            })
-            .then((response) => {
-              if (response.status == 203) {
-                Dialog.alert({
-                  title: "已核销",
-                  message: "请勿重复核销",
-                });
-                return;
-              }
-              Toast({ message: "核销成功" });
-            })
-            .catch(() => {
-              Toast({ message: "无核销权限" });
-            });
-          // var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-        },
-      });
+      if (this.user.permission == "employee") {
+        this.$wx.scanQRCode({
+          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          // scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+          success: (res) => {
+            // Toast({ message: res.resultStr });
+            this.axios
+              .put(this.$api + `coupon/${res.resultStr}/use`, {
+                temporaryId: localStorage.temporaryId,
+              })
+              .then((response) => {
+                if (response.status == 203) {
+                  Dialog.alert({
+                    title: "已核销",
+                    message: "请勿重复核销",
+                  });
+                  return;
+                }
+                Toast({ message: "核销成功" });
+              })
+              .catch(() => {
+                Toast({ message: "无核销权限" });
+              });
+          },
+        });
+      }
     },
 
     dealWithTheCoupon(coupon) {
       if (coupon.state == "available") {
         this.qrcode = this.$qrcode.getQrBase64(coupon.id.toString());
         this.showQrcode = true;
+        return;
       }
+      Toast({ message: "此券已经核销" });
     },
 
     generatePoster() {
@@ -625,3 +629,5 @@ export default {
   }
 }
 </style>
+
+
