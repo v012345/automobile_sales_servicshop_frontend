@@ -337,7 +337,14 @@ export default {
           open_id: this.user.open_id,
         })
         .then((response) => {
-          console.log(response.data);
+          this.$wx.chooseWXPay({
+            ...response.data,
+            timestamp: response.data.timeStamp,
+            success: (res) => {
+              Toast({ duration: 0, message: res });
+            },
+          });
+          // console.log(response.data);
         });
     },
 

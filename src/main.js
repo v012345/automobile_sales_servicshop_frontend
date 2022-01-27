@@ -12,12 +12,13 @@ import wx from 'weixin-js-sdk';
 import UUID from "vue-uuid";
 
 
-dayjs.extend(relativeTime)
+
+dayjs.extend(relativeTime);
 Vue.use(UUID);
-Vue.use(Vant)
-Vue.use(VueRouter)
-Vue.config.productionTip = false
-Vue.use(VueAxios, axios)
+Vue.use(Vant);
+Vue.use(VueRouter);
+Vue.config.productionTip = false;
+Vue.use(VueAxios, axios);
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this;
