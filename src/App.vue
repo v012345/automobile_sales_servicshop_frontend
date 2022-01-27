@@ -335,7 +335,7 @@ export default {
           amount: 0.01,
           payer: this.user.id,
           open_id: this.user.open_id,
-          activityId: this.activity.id,
+          item: this.activity.id,
         })
         .then((response) => {
           this.$wx.chooseWXPay({
