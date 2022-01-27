@@ -416,7 +416,7 @@ export default {
         success: (res) => {
           // Toast({ message: res.resultStr });
           this.axios
-            .put(this.$api + `coupon/${res}/use`, {
+            .put(this.$api + `coupon/${res.resultStr}/use`, {
               temporaryId: localStorage.temporaryId,
             })
             .then((response) => {
