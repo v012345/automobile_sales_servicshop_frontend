@@ -180,28 +180,25 @@
         :style="{ minHeight: '100vw', paddingTop: '1rem' }"
       >
         <van-tabs type="card">
-          <van-tab
-            v-for="index in 2"
-            :title="index == 1 ? '活动说明' : '我的奖品'"
-            :key="index"
-          >
-            <div v-if="index == 1">
-              <div>
-                <van-button round type="default">参与记录</van-button>
-                <div></div>
+          <van-tab title="活动说明">
+            <div>
+              <van-button round type="default">参与记录</van-button>
+              <div v-if="haveACoupon">
+                {{ availableCoupons[0].created_at }}参加活动
               </div>
-              <div>
-                <van-button round type="default">活动时间</van-button>
-                <div>{{ activity.start_at }}} - {{ activity.end_at }}}</div>
-              </div>
-              <div>
-                <van-button round type="default">技术支持</van-button>
-                <div>页面技术由"***"提供</div>
-              </div>
+              <div v-else>未参加</div>
+            </div>
+            <div>
+              <van-button round type="default">活动时间</van-button>
+              <div>{{ activity.start_at }} 至 {{ activity.end_at }}</div>
+            </div>
+            <div>
+              <van-button round type="default">技术支持</van-button>
+              <div>页面技术由"***"提供</div>
             </div>
           </van-tab>
-        </van-tabs></van-popup
-      >
+          <van-tab title="我的奖品"> </van-tab> </van-tabs
+      ></van-popup>
     </div>
 
     <div>
@@ -232,6 +229,7 @@
                 :value="coupon.value"
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
+                :state="coupon.state"
               ></Coupon>
             </div>
           </van-tab>
@@ -245,21 +243,24 @@
                 :value="coupon.value"
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
+                :state="coupon.state"
               ></Coupon></div
           ></van-tab>
           <van-tab title="失效的" name="expired">
-            <div
-              v-for="coupon in expiredCoupons"
-              @click="dealWithTheCoupon(coupon)"
-              :key="coupon.id"
-            >
+            <div v-for="coupon in expiredCoupons" :key="coupon.id">
               <Coupon
                 :value="coupon.value"
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
+                :state="coupon.state"
               ></Coupon></div
           ></van-tab>
         </van-tabs>
+      </van-popup>
+    </div>
+    <div>
+      <van-popup v-model="showQrcode">
+        <van-image :src="qrcode" />
       </van-popup>
     </div>
   </div>
@@ -275,6 +276,8 @@ export default {
   name: "App",
   data() {
     return {
+      qrcode: "",
+      showQrcode: false,
       inviter: undefined,
       showIntroduction: false,
       user: {},
@@ -406,17 +409,30 @@ export default {
     },
 
     scan() {
+      //注意角色权限
       this.$wx.scanQRCode({
         needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+        // scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
         success: (res) => {
-          Toast({ message: res.resultStr });
+          // Toast({ message: res.resultStr });
+          this.axios
+            .put(this.$api + `coupon/${res}/use`, {
+              temporaryId: localStorage.temporaryId,
+            })
+            .then((response) => {
+              Toast({ duration: 0, message: response.data });
+            });
           // var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
         },
       });
     },
 
-    dealWithTheCoupon() {},
+    dealWithTheCoupon(coupon) {
+      if (coupon.state == "available") {
+        this.qrcode = this.$qrcode.getQrBase64(coupon.id.toString());
+        this.showQrcode = true;
+      }
+    },
 
     generatePoster() {
       this.axios

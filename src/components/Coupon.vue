@@ -6,7 +6,7 @@
     </div>
     <div class="van-coupon__body">
       <p class="van-coupon__name">优惠券</p>
-      <p class="van-coupon__valid">{{ allow_to_use_at }}-{{ expire_at }}</p>
+      <p class="van-coupon__valid">{{ allow_to_use_at }} 至 {{ expire_at }}</p>
       <div
         role="checkbox"
         tabindex="0"
@@ -29,6 +29,6 @@
 <script>
 export default {
   name: "Coupon",
-  props: ["value", "allow_to_use_at", "expire_at"],
+  props: ["value", "allow_to_use_at", "expire_at","state"],
 };
 </script>
