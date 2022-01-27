@@ -176,12 +176,17 @@
     <div>
       <van-popup
         v-model="showIntroduction"
+        closeable
         position="top"
-        :style="{ minHeight: '100vw', paddingTop: '1rem' }"
+        :style="{
+          minHeight: '100vw',
+          paddingTop: '3rem',
+          boxSizing: 'border-box',
+        }"
       >
         <van-tabs type="card">
           <van-tab title="活动说明">
-            <div>
+            <div style="margin-top: 1rem">
               <van-button round type="default">参与记录</van-button>
               <div v-if="haveACoupon">
                 {{ availableCoupons[0].created_at }}参加活动
@@ -197,7 +202,17 @@
               <div>页面技术由"***"提供</div>
             </div>
           </van-tab>
-          <van-tab title="我的奖品"> </van-tab> </van-tabs
+          <van-tab title="我的奖品">
+            <div v-for="coupon in availableCoupons" :key="coupon.id">
+              <Coupon
+                :value="coupon.value"
+                :allow_to_use_at="activity.allow_to_use_at"
+                :expire_at="activity.expire_at"
+                :description="activity.description"
+                :available="true"
+              ></Coupon>
+            </div>
+          </van-tab> </van-tabs
       ></van-popup>
     </div>
 
