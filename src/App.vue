@@ -397,8 +397,10 @@ export default {
           payer: this.user.id,
           open_id: this.user.open_id,
           activityId: this.activity.id,
+          inviter: this.inviter,
         })
         .then((response) => {
+          console.log(response.data);
           this.$wx.chooseWXPay({
             ...response.data,
             timestamp: response.data.timeStamp,
@@ -495,7 +497,9 @@ export default {
     localStorage.inviter =
       window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
       localStorage.inviter;
-    this.inviter = localStorage.inviter;
+    if (localStorage.inviter != "undefined") {
+      this.inviter = localStorage.inviter;
+    }
 
     if (!localStorage.temporaryId) {
       localStorage.temporaryId = this.$uuid.v1();
@@ -534,7 +538,7 @@ export default {
         imgUrl:
           "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AUser_icon_2.svg&psig=AOvVaw2H1JS2UmBkgL1TBmSZ3la6&ust=1643260367689000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKi4-4XUzvUCFQAAAAAdAAAAABAD", // 分享图标
         success: () => {
-          Toast({ message: "updateAppMessageShareData" });
+          // Toast({ message: "updateAppMessageShareData" });
         },
       });
       this.$wx.updateTimelineShareData({
@@ -544,7 +548,7 @@ export default {
           "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AUser_icon_2.svg&psig=AOvVaw2H1JS2UmBkgL1TBmSZ3la6&ust=1643260367689000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKi4-4XUzvUCFQAAAAAdAAAAABAD", // 分享图标
 
         success: () => {
-          Toast({ message: "updateTimelineShareData" });
+          // Toast({ message: "updateTimelineShareData" });
         },
       });
     });
