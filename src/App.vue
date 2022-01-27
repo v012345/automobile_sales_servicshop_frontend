@@ -95,29 +95,31 @@
       </div>
     </div>
 
-    <div class="van-hairline--bottom">
-      已有{{ activity.participants.length }}人关注
-    </div>
-    <div class="participant-avatar">
-      <div
-        class="avatar"
-        v-for="i in Math.min(33, activity.participants.length)"
-        :key="i.id"
-      >
-        <van-image
-          width="90%"
-          round
-          fit="cover"
-          :src="activity.participants[i - 1].participant_info.avatar"
-        />
+    <template v-if="activity.id"
+      ><div class="van-hairline--bottom">
+        已有{{ activity.participants.length }}人关注
       </div>
-    </div>
-    <div class="van-hairline--bottom">
-      已参与{{ activity.participantCount }}人
-    </div>
+      <div class="participant-avatar">
+        <div
+          class="avatar"
+          v-for="i in Math.min(33, activity.participants.length)"
+          :key="i.id"
+        >
+          <van-image
+            width="90%"
+            round
+            fit="cover"
+            :src="activity.participants[i - 1].participant_info.avatar"
+          />
+        </div>
+      </div>
+      <div class="van-hairline--bottom">
+        已参与{{ activity.participantCount }}人
+      </div></template
+    >
 
     <div class="coupon-buttons">
-      <div @click="showMyCoupons">
+      <div @click="showCoupons = true">
         <img src="./assets/myCoupons.jpg" />
       </div>
       <div @click="scan">
@@ -153,9 +155,23 @@
       <div class="introduction-button" @click="showIntroduction = true">
         <p>活动锦囊</p>
       </div>
-      <div class="sign-up-button" @click="buyCoupon">
-        <p>已参与({{ activity.signing_up_fee }}元)</p>
-      </div>
+      <template v-if="activity.state == 'end'">
+        <div class="sign-up-button">
+          <p>活动已结束</p>
+        </div>
+      </template>
+      <template v-else>
+        <template v-if="!haveACoupon">
+          <div class="sign-up-button" @click="buyCoupon">
+            <p>马上参与({{ activity.signing_up_fee }}元)</p>
+          </div>
+        </template>
+        <template v-if="haveACoupon">
+          <div class="sign-up-button">
+            <p>已参与({{ activity.signing_up_fee }}元)</p>
+          </div>
+        </template>
+      </template>
     </div>
     <div>
       <van-popup
@@ -183,9 +199,9 @@
                 <div>页面技术由"***"提供</div>
               </div>
             </div>
-            <div v-if="index == 2"></div>
-          </van-tab> </van-tabs
-      ></van-popup>
+          </van-tab>
+        </van-tabs></van-popup
+      >
     </div>
 
     <div>
@@ -193,9 +209,10 @@
         <div class="poster"><van-image width="100%" :src="poster.src" /></div>
       </van-popup>
     </div>
-    <div>
+
+    <div v-if="user.id && activity.id">
       <van-popup
-        v-model="myCoupons.show"
+        v-model="showCoupons"
         closeable
         position="bottom"
         :style="{
@@ -205,51 +222,43 @@
         }"
       >
         <van-tabs type="card">
-          <van-tab
-            v-for="(c, index) in myCoupons.couponList"
-            :title="c.type"
-            :key="index"
-          >
+          <van-tab title="可用的" name="available">
             <div
-              v-for="coupon in c.coupons"
+              v-for="coupon in availableCoupons"
               @click="dealWithTheCoupon(coupon)"
               :key="coupon.id"
             >
-              <div class="van-coupon__content">
-                <div class="van-coupon__head">
-                  <h2 class="van-coupon__amount">
-                    {{ coupon.value }}<span>元</span>
-                  </h2>
-                  <p class="van-coupon__condition">无使用门槛</p>
-                </div>
-                <div class="van-coupon__body">
-                  <p class="van-coupon__name">优惠券</p>
-                  <p class="van-coupon__valid">54545-5487</p>
-                  <div
-                    role="checkbox"
-                    tabindex="0"
-                    aria-checked="true"
-                    class="van-checkbox van-coupon__corner"
-                    size="18"
-                  >
-                    <div
-                      class="
-                        van-checkbox__icon
-                        van-checkbox__icon--round
-                        van-checkbox__icon--checked
-                      "
-                    >
-                      <!-- <i class="van-icon van-icon-success" style="border-color: rgb(238, 10, 36); background-color: rgb(238, 10, 36);">
-                                    </i> -->
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Coupon
+                :value="coupon.value"
+                :allow_to_use_at="activity.allow_to_use_at"
+                :expire_at="activity.expire_at"
+              ></Coupon>
             </div>
-            <!-- <div v-if="c.type == 1"></div>
-            <div v-if="c.type == 2"></div>
-            <div v-if="c.type == 3"></div> -->
           </van-tab>
+          <van-tab title="分享的" name="shared">
+            <div
+              v-for="coupon in sharedCoupons"
+              @click="dealWithTheCoupon(coupon)"
+              :key="coupon.id"
+            >
+              <Coupon
+                :value="coupon.value"
+                :allow_to_use_at="activity.allow_to_use_at"
+                :expire_at="activity.expire_at"
+              ></Coupon></div
+          ></van-tab>
+          <van-tab title="失效的" name="expired">
+            <div
+              v-for="coupon in expiredCoupons"
+              @click="dealWithTheCoupon(coupon)"
+              :key="coupon.id"
+            >
+              <Coupon
+                :value="coupon.value"
+                :allow_to_use_at="activity.allow_to_use_at"
+                :expire_at="activity.expire_at"
+              ></Coupon></div
+          ></van-tab>
         </van-tabs>
       </van-popup>
     </div>
@@ -260,6 +269,7 @@
 // import HelloWorld from "./components/HelloWorld.vue";
 
 import { Toast } from "vant";
+import Coupon from "./components/Coupon.vue";
 
 export default {
   name: "App",
@@ -280,29 +290,30 @@ export default {
         name: "",
         carModel: "",
       },
-      myCoupons: {
-        show: false,
-        couponList: [
-          {
-            type: "available",
-            coupons: [
-              {
-                id: 1,
-                value: 20,
-              },
-              {
-                id: 2,
-                value: 20,
-              },
-            ],
-          },
-          { type: "shareable", coupons: [] },
-          { type: "expired", coupons: [] },
-        ],
-      },
+      showCoupons: false,
     };
   },
+  components: {
+    Coupon,
+  },
+  watch: {
+    activity() {},
+  },
   computed: {
+    haveACoupon() {
+      if (this.user.id && this.activity.id) {
+        let coupons = this.user.coupons.filter((coupon) => {
+          return (
+            coupon.activity_id == this.activity.id && coupon.type == "normal"
+          );
+        });
+
+        if (coupons.length > 0) {
+          return true;
+        }
+      }
+      return false;
+    },
     countDown() {
       if (this.activity.end_at) {
         if (!this.$dayjs().isBefore(this.activity.end_at)) {
@@ -313,6 +324,41 @@ export default {
         );
       }
       return 1 * 24 * 60 * 60 * 1000;
+    },
+    availableCoupons() {
+      if (this.user.id && this.activity.id) {
+        return this.user.coupons.filter((coupon) => {
+          return (
+            coupon.activity_id == this.activity.id &&
+            this.$dayjs().isBefore(this.activity.expire_at) &&
+            coupon.type == "normal"
+          );
+        });
+      }
+      return [];
+    },
+    sharedCoupons() {
+      if (this.user.id && this.activity.id) {
+        return this.user.coupons.filter((coupon) => {
+          return (
+            coupon.activity_id == this.activity.id &&
+            this.$dayjs().isBefore(this.activity.expire_at) &&
+            coupon.type == "shared"
+          );
+        });
+      }
+      return [];
+    },
+    expiredCoupons() {
+      if (this.user.id && this.activity.id) {
+        return this.user.coupons.filter((coupon) => {
+          return (
+            coupon.activity_id == this.activity.id &&
+            !this.$dayjs().isBefore(this.activity.expire_at)
+          );
+        });
+      }
+      return [];
     },
   },
   methods: {
@@ -337,17 +383,26 @@ export default {
           this.$wx.chooseWXPay({
             ...response.data,
             timestamp: response.data.timeStamp,
-            success: (res) => {
-              Toast({ duration: 0, message: res });
+            success: () => {
+              //起websocket的,等之后吧
+              setTimeout(() => {
+                this.axios
+                  .post(this.$api + "login", {
+                    temporaryId: localStorage.temporaryId,
+                  })
+                  .then((response) => {
+                    if (response.status == 200) {
+                      this.user = response.data;
+                    }
+                  });
+              }, 3000);
             },
           });
-          // console.log(response.data);
         });
     },
 
     activityEnds() {
       this.activity.state = "ended";
-      // this.$forceUpdate();
     },
 
     scan() {
@@ -362,9 +417,7 @@ export default {
     },
 
     dealWithTheCoupon() {},
-    showMyCoupons() {
-      this.myCoupons.show = true;
-    },
+
     generatePoster() {
       this.axios
         .post("http://localhost/api/posters", {
@@ -462,9 +515,6 @@ export default {
           ...response.data,
         });
       });
-  },
-  components: {
-    // HelloWorld,
   },
 };
 </script>
