@@ -268,14 +268,7 @@ export default {
       inviter: undefined,
       showIntroduction: false,
       user: {},
-      activity: {
-        id: 0,
-        subscriberCount: 55,
-        subscribers: [],
-        participantCount: 20,
-        participants: [],
-        countdown: 5875258,
-      },
+      activity: {},
 
       poster: {
         show: false,
@@ -330,6 +323,9 @@ export default {
       });
     },
     buyCoupon() {
+      if (!(this.user.id && this.activity.id)) {
+        return;
+      }
       this.axios
         .post(this.$api + "pay", {
           amount: 0.01,
