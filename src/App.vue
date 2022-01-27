@@ -269,7 +269,7 @@
 <script>
 // import HelloWorld from "./components/HelloWorld.vue";
 
-import { Toast } from "vant";
+import { Toast, Dialog } from "vant";
 import Coupon from "./components/Coupon.vue";
 
 export default {
@@ -420,7 +420,17 @@ export default {
               temporaryId: localStorage.temporaryId,
             })
             .then((response) => {
-              Toast({ duration: 0, message: JSON.stringify(response.data) });
+              if (response.status == 203) {
+                Dialog.alert({
+                  title: "已核销",
+                  message: "请勿重复核销",
+                });
+                return;
+              }
+              Toast({ message: "核销成功" });
+            })
+            .catch(() => {
+              Toast({ message: "无核销权限" });
             });
           // var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
         },
