@@ -335,6 +335,7 @@ export default {
           amount: 0.01,
           payer: this.user.id,
           open_id: this.user.open_id,
+          activityId: this.activity.id,
         })
         .then((response) => {
           this.$wx.chooseWXPay({
@@ -394,6 +395,7 @@ export default {
           response.data.state = "inProgress";
         }
         this.activity = response.data;
+        localStorage.activityId = response.data.id;
       });
 
     localStorage.inviter =
