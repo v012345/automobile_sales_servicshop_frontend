@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <!-- <div>
       <video
         preload="auto"
         width="100%"
@@ -16,31 +16,31 @@
         src=http://amap.100pq.cn/disk/videos/20220112/806133f34c30cf034b72db456a037f9d.mp4
         type="video/mp4" />
       </video>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       <van-image
         fit="cover"
         src="http://amap.100pq.cn/disk/20220106/367af4492c4a056063ec77bb530055bc.jpg"
       />
-    </div>
+    </div> -->
 
     <van-form>
       <van-field
-        v-model="shop.title"
+        v-model="activity.shop"
         label="门店名称"
         readonly
         placeholder="门店名称"
       />
       <van-field
-        v-model="shop.tel"
+        v-model="activity.tel"
         label="门店电话"
         readonly
         placeholder="门店电话"
       />
       <van-field
         readonly
-        v-model="shop.address"
+        v-model="activity.address"
         label="门店地址"
         placeholder="门店地址"
       />
@@ -77,19 +77,40 @@
     <div class="count-down">
       <img src="./assets/countdown.png" />
       <div class="text">
-        <div>报名参加活动</div>
-        <div>参与倒计时</div>
-        <div>
-          <van-count-down
-            :time="activity.countdown"
-            format="DD 天 HH时 mm分 ss秒"
-          />
-        </div>
+        <template v-if="activity.state == 'inProgress'">
+          <div>报名参加活动</div>
+          <div>活动倒计时</div>
+          <div>
+            <van-count-down
+              @finish="activityEnds"
+              :time="countDown"
+              format="DD 天 HH时 mm分 ss秒"
+            />
+          </div>
+        </template>
+        <template v-else>
+          <div>活动已结束</div>
+          <div>下一场活动马上开启</div>
+        </template>
       </div>
     </div>
 
     <div class="van-hairline--bottom">
-      已有{{ activity.subscriberCount }}人关注
+      已有{{ activity.participants.length }}人关注
+    </div>
+    <div class="participant-avatar">
+      <div
+        class="avatar"
+        v-for="i in Math.min(33, activity.participants.length)"
+        :key="i.id"
+      >
+        <van-image
+          width="90%"
+          round
+          fit="cover"
+          :src="activity.participants[i - 1].participant_info.avatar"
+        />
+      </div>
     </div>
     <div class="van-hairline--bottom">
       已参与{{ activity.participantCount }}人
@@ -104,7 +125,7 @@
       </div>
     </div>
 
-    <div>
+    <!-- <div>
       <van-image
         src="http://amap.100pq.cn/disk/20220106/d821587a0c06f5cd0dc22a4d9f87343b.png"
         alt=""
@@ -121,13 +142,9 @@
         src="http://amap.100pq.cn/disk/20220106/8175e53403c11236d720e71a448b709c.jpg"
         alt=""
       />
-    </div>
+    </div> -->
     <div class="footer">由****提供技术支持</div>
-    <!-- <div>
-      <router-link to="/about">About</router-link>
-      <router-link to="/home">Home</router-link>
-    </div>
-    <router-view></router-view> -->
+
     <div class="share-button" @click="generatePoster">
       <van-icon size="40" color="#b8b8b8" name="share-o" />
     </div>
@@ -136,8 +153,8 @@
       <div class="introduction-button" @click="showIntroduction = true">
         <p>活动锦囊</p>
       </div>
-      <div class="sign-up-button">
-        <p>已参与(29.8元)</p>
+      <div class="sign-up-button" @click="buyCoupon">
+        <p>已参与({{ activity.signing_up_fee }}元)</p>
       </div>
     </div>
     <div>
@@ -159,7 +176,7 @@
               </div>
               <div>
                 <van-button round type="default">活动时间</van-button>
-                <div>2021年12月31日 - 2021年1月31日</div>
+                <div>{{ activity.start_at }}} - {{ activity.end_at }}}</div>
               </div>
               <div>
                 <van-button round type="default">技术支持</van-button>
@@ -248,6 +265,7 @@ export default {
   name: "App",
   data() {
     return {
+      inviter: undefined,
       showIntroduction: false,
       user: {},
       activity: {
@@ -259,11 +277,6 @@ export default {
         countdown: 5875258,
       },
 
-      shop: {
-        title: "测试门店",
-        tel: "13378944444",
-        address: "北京二环什刹海",
-      },
       poster: {
         show: false,
         src: "",
@@ -296,12 +309,41 @@ export default {
       },
     };
   },
+  computed: {
+    countDown() {
+      if (this.activity.end_at) {
+        if (!this.$dayjs().isBefore(this.activity.end_at)) {
+          return 0;
+        }
+        return Math.abs(
+          this.$dayjs().diff(this.activity.end_at, "millisecond")
+        );
+      }
+      return 1 * 24 * 60 * 60 * 1000;
+    },
+  },
   methods: {
     test1() {
       this.axios.post(this.$api + "posters/test").then((response) => {
         this.poster.src = response.data;
         this.poster.show = true;
       });
+    },
+    buyCoupon() {
+      this.axios
+        .post(this.$api + "pay", {
+          amount: 0.01,
+          payer: this.user.id,
+          open_id: this.user.open_id,
+        })
+        .then((response) => {
+          console.log(response.data);
+        });
+    },
+
+    activityEnds() {
+      this.activity.state = "ended";
+      // this.$forceUpdate();
     },
 
     scan() {
@@ -336,9 +378,21 @@ export default {
       window.location.href.match(/(?<=\/activity\/)(\d+)/g) ||
       localStorage.activityId;
 
+    this.axios
+      .get(this.$api + "activity/" + localStorage.activityId)
+      .then((response) => {
+        if (!this.$dayjs().isBefore(response.data.end_at)) {
+          response.data.state = "ended";
+        } else {
+          response.data.state = "inProgress";
+        }
+        this.activity = response.data;
+      });
+
     localStorage.inviter =
       window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
       localStorage.inviter;
+    this.inviter = localStorage.inviter;
 
     if (!localStorage.temporaryId) {
       localStorage.temporaryId = this.$uuid.v1();
@@ -356,9 +410,18 @@ export default {
             });
         } else if (response.status == 200) {
           this.user = response.data;
-          console.log(response.data);
+          if (
+            localStorage.activityId &&
+            localStorage.activityId != "undefined"
+          ) {
+            this.axios.post(this.$api + "user/activity", {
+              userId: this.user.id,
+              activityId: localStorage.activityId,
+            });
+          }
         }
       });
+
     this.$wx.ready(() => {
       //需在用户可能点击分享按钮前就先调用
       this.$wx.updateAppMessageShareData({
@@ -368,7 +431,6 @@ export default {
         imgUrl:
           "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AUser_icon_2.svg&psig=AOvVaw2H1JS2UmBkgL1TBmSZ3la6&ust=1643260367689000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKi4-4XUzvUCFQAAAAAdAAAAABAD", // 分享图标
         success: () => {
-          // 设置成功
           Toast({ message: "updateAppMessageShareData" });
         },
       });
@@ -378,31 +440,11 @@ export default {
         imgUrl:
           "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommons.wikimedia.org%2Fwiki%2FFile%3AUser_icon_2.svg&psig=AOvVaw2H1JS2UmBkgL1TBmSZ3la6&ust=1643260367689000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKi4-4XUzvUCFQAAAAAdAAAAABAD", // 分享图标
 
-        success: function () {
-          // 设置成功
+        success: () => {
           Toast({ message: "updateTimelineShareData" });
         },
       });
     });
-
-    this.axios
-      .get(
-        this.$api +
-          "activity/" +
-          (localStorage.activityId == "undefined" ? 0 : localStorage.activityId)
-      )
-      .then((response) => {
-        console.log(response);
-      });
-
-    this.axios
-      .post(this.$api + "user/activity", {
-        userId: 123,
-        activityId: 321,
-      })
-      .then((r) => {
-        console.log(r.data);
-      });
 
     this.axios
       .get(this.$api + "wechat/jssdk", {
@@ -423,6 +465,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.participant-avatar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  .avatar {
+    display: flex;
+    justify-content: center;
+    width: 9.09vw;
+  }
+}
 .coupon-buttons {
   display: flex;
   div {
