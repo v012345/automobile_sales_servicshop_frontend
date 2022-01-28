@@ -26,10 +26,13 @@
         placeholder="门店名称"
       />
       <van-field
+        @click="call(activity.tel)"
+        clickable
         v-model="activity.tel"
         label="门店电话"
         readonly
         placeholder="门店电话"
+        right-icon="phone"
       />
       <van-field
         readonly
@@ -173,6 +176,8 @@
         </van-notice-bar>
       </div>
     </template>
+
+    <a href="tel:10086">马上拨打电话10086</a>
 
     <div class="coupon-buttons">
       <div @click="showCoupons = true">
@@ -439,6 +444,9 @@ export default {
     },
   },
   methods: {
+    call(n) {
+      window.location.href = "tel://" + n;
+    },
     test1() {
       this.axios.post(this.$api + "posters/test").then((response) => {
         this.poster.src = response.data;
