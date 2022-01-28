@@ -32,13 +32,17 @@
         label="门店电话"
         readonly
         placeholder="门店电话"
-        right-icon="phone"
+        right-icon="phone-o"
       />
+
       <van-field
+        @click="openLocation(activity.address)"
+        clickable
         readonly
         v-model="activity.address"
         label="门店地址"
         placeholder="门店地址"
+        right-icon="location-o"
       />
     </van-form>
     <div>
@@ -176,8 +180,6 @@
         </van-notice-bar>
       </div>
     </template>
-
-    <a href="tel:10086">马上拨打电话10086</a>
 
     <div class="coupon-buttons">
       <div @click="showCoupons = true">
@@ -444,6 +446,16 @@ export default {
     },
   },
   methods: {
+    openLocation() {
+      this.$wx.openLocation({
+        latitude: 90, // 纬度，浮点数，范围为90 ~ -90
+        longitude: 90, // 经度，浮点数，范围为180 ~ -180。
+        name: "", // 位置名
+        address: "", // 地址详情说明
+        scale: 1, // 地图缩放级别,整型值,范围从1~28。默认为最大
+        infoUrl: "", // 在查看位置界面底部显示的超链接,可点击跳转
+      });
+    },
     call(n) {
       window.location.href = "tel://" + n;
     },
