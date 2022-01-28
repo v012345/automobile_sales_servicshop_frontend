@@ -36,7 +36,7 @@
       />
 
       <van-field
-        @click="openLocation(activity.address)"
+        @click="locate(activity.location)"
         clickable
         readonly
         v-model="activity.address"
@@ -446,12 +446,9 @@ export default {
     },
   },
   methods: {
-    openLocation() {
+    locate(coordinate) {
       this.$wx.openLocation({
-        latitude: 41.41823, // 纬度，浮点数，范围为90 ~ -90
-        longitude: 125.02632, // 经度，浮点数，范围为180 ~ -180。
-
-        scale: 10, // 地图缩放级别,整型值,范围从1~28。默认为最大
+        ...coordinate,
       });
     },
     call(n) {
