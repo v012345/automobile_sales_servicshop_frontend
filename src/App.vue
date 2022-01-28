@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <template v-if="activity.id">
       <video
         preload="auto"
         width="100%"
@@ -10,20 +10,13 @@
         x5-playsinline=""
         playsinline=""
         webkit-playsinline="true"
-        poster="http://amap.100pq.cn/disk/20220106/dc3fc9b725f6919b3e3df356c03399fb.png"
+        :poster="$backend + activity.video_thumbnail"
       >
-        <source
-        src=http://amap.100pq.cn/disk/videos/20220112/806133f34c30cf034b72db456a037f9d.mp4
-        type="video/mp4" />
+        <source :src="$backend + activity.video" type="video/mp4" />
       </video>
-    </div>
 
-    <div>
-      <van-image
-        fit="cover"
-        src="http://amap.100pq.cn/laravel/public/images/poster.jpg"
-      />
-    </div>
+      <van-image width="100vw" fit="cover" :src="$backend + activity.poster" />
+    </template>
 
     <van-form>
       <van-field
@@ -128,28 +121,31 @@
             >
               <div class="swipe-item">
                 <div class="row" v-for="j in 2" :key="j">
-                  <van-image
-                    height="25px"
-                    width="25px"
-                    fit="cover"
-                    round
-                    :src="
-                      normalCoupons.coupons[
-                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
-                      ].participant.participant_info.avatar
-                    "
-                  />
+                  <div class="avatar">
+                    <van-image
+                      height="25px"
+                      width="25px"
+                      fit="cover"
+                      round
+                      :src="
+                        normalCoupons.coupons[
+                          (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                        ].participant.participant_info.avatar
+                      "
+                    />
+                  </div>
+
                   <div style="margin-right: 0.5rem">
                     {{
                       normalCoupons.coupons[
-                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                       ].participant.participant_info.name
                     }}
                   </div>
                   <div style="margin-right: 0.5rem">
                     {{
                       normalCoupons.coupons[
-                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                       ].participant.license_plate_number.replace(
                         /^(..)(.*)(.)$/,
                         "$1**$3"
@@ -159,7 +155,7 @@
                   <div style="margin-right: 0.5rem">
                     {{
                       normalCoupons.coupons[
-                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                       ].created_at
                     }}
                   </div>
@@ -668,6 +664,10 @@ export default {
       line-height: 30px;
       display: flex;
       align-items: center;
+      .avatar {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }
