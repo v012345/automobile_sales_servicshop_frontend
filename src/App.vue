@@ -130,6 +130,7 @@
                 <div class="row" v-for="j in 2" :key="j">
                   <van-image
                     height="25px"
+                    width="25px"
                     fit="cover"
                     round
                     :src="
