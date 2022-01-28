@@ -449,6 +449,7 @@ export default {
     locate(coordinate) {
       this.$wx.openLocation({
         ...coordinate,
+        scale: 17,
       });
     },
     call(n) {
