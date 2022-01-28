@@ -524,6 +524,8 @@ export default {
               });
           },
         });
+      } else {
+        Toast({ message: "请找工作人员进行核销" });
       }
     },
 
