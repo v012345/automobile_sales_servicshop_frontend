@@ -448,9 +448,10 @@ export default {
   methods: {
     openLocation() {
       this.$wx.openLocation({
-        latitude: 125.02632,
-        longitude: 41.41823,
-        scale: 10,
+        latitude: 41.41823, // 纬度，浮点数，范围为90 ~ -90
+        longitude: 125.02632, // 经度，浮点数，范围为180 ~ -180。
+
+        scale: 10, // 地图缩放级别,整型值,范围从1~28。默认为最大
       });
     },
     call(n) {
