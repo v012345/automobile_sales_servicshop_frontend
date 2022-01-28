@@ -455,12 +455,6 @@ export default {
     call(n) {
       window.location.href = "tel://" + n;
     },
-    test1() {
-      this.axios.post(this.$api + "posters/test").then((response) => {
-        this.poster.src = response.data;
-        this.poster.show = true;
-      });
-    },
     buyCoupon() {
       if (!(this.user.id && this.activity.id)) {
         return;
@@ -555,15 +549,18 @@ export default {
     },
 
     generatePoster() {
-      this.axios
-        .post("http://localhost/api/posters", {
-          userId: 123,
-        })
-        .then((response) => {
-          // console.log(response.data);
-          this.poster.src = response.data;
-          this.poster.show = true;
-        });
+      if (this.user.id && this.activity.id) {
+        this.axios
+          .get(
+            this.$api +
+              `activity/${this.activity.id}/participant/${this.user.id}/poster/`
+          )
+          .then((response) => {
+            // console.log(response.data);
+            this.poster.src = response.data;
+            this.poster.show = true;
+          });
+      }
     },
   },
   mounted() {
