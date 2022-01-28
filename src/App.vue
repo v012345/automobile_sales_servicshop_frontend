@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div>
+    <div>
       <video
         preload="auto"
         width="100%"
@@ -16,14 +16,14 @@
         src=http://amap.100pq.cn/disk/videos/20220112/806133f34c30cf034b72db456a037f9d.mp4
         type="video/mp4" />
       </video>
-    </div> -->
+    </div>
 
-    <!-- <div>
+    <div>
       <van-image
         fit="cover"
-        src="http://amap.100pq.cn/disk/20220106/367af4492c4a056063ec77bb530055bc.jpg"
+        src="http://amap.100pq.cn/laravel/public/images/poster.jpg"
       />
-    </div> -->
+    </div>
 
     <van-form>
       <van-field
@@ -50,26 +50,26 @@
     </div>
     <van-form>
       <van-field
-        v-model="client.licensePlateNumber"
+        v-model.trim="sign_up_form.licensePlateNumber"
         required
         label="车牌号"
         placeholder="车牌号"
       />
       <van-field
         required
-        v-model="client.phoneNumber"
+        v-model.trim="sign_up_form.phoneNumber"
         label="手机号"
         placeholder="手机号"
       />
       <van-field
         required
-        v-model="client.name"
+        v-model.trim="sign_up_form.name"
         label="姓名"
         placeholder="姓名"
       />
       <van-field
         required
-        v-model="client.carModel"
+        v-model.trim="sign_up_form.carModel"
         label="车型"
         placeholder="车型"
       />
@@ -303,7 +303,7 @@ export default {
         show: false,
         src: "",
       },
-      client: {
+      sign_up_form: {
         licensePlateNumber: "",
         phoneNumber: "",
         name: "",
@@ -391,6 +391,18 @@ export default {
       if (!(this.user.id && this.activity.id)) {
         return;
       }
+
+      if (
+        !(
+          this.sign_up_form.licensePlateNumber &&
+          this.sign_up_form.phoneNumber &&
+          this.sign_up_form.name &&
+          this.sign_up_form.carModel
+        )
+      ) {
+        Toast({ message: "请登记完整信息" });
+        return;
+      }
       this.axios
         .post(this.$api + "pay", {
           amount: 0.01,
@@ -398,6 +410,7 @@ export default {
           open_id: this.user.open_id,
           activityId: this.activity.id,
           inviter: this.inviter,
+          ...this.sign_up_form,
         })
         .then((response) => {
           console.log(response.data);
@@ -491,6 +504,7 @@ export default {
           response.data.state = "inProgress";
         }
         this.activity = response.data;
+        console.log(this.activity);
         localStorage.activityId = response.data.id;
       });
 
