@@ -183,24 +183,14 @@
       </div>
     </div>
 
-    <!-- <div>
+    <template v-if="activity.id">
       <van-image
-        src="http://amap.100pq.cn/disk/20220106/d821587a0c06f5cd0dc22a4d9f87343b.png"
-        alt=""
+        v-for="(image, i) in activity.propaganda_images"
+        :key="i"
+        :src="$backend + image"
       />
-      <van-image
-        src="http://amap.100pq.cn/disk/20220106/f97757c1f61b926720136f88cdbf3416.jpg"
-        alt=""
-      />
-      <van-image
-        src="http://amap.100pq.cn/disk/20220106/e6f042229ada92fbe64fe5f6b345971e.jpg"
-        alt=""
-      />
-      <van-image
-        src="http://amap.100pq.cn/disk/20220106/8175e53403c11236d720e71a448b709c.jpg"
-        alt=""
-      />
-    </div> -->
+    </template>
+
     <div class="footer">由****提供技术支持</div>
 
     <div class="share-button" @click="generatePoster">
