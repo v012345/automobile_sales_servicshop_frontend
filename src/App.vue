@@ -113,10 +113,69 @@
           />
         </div>
       </div>
-      <div class="van-hairline--bottom">
-        已参与{{ activity.participantCount }}人
-      </div></template
-    >
+      <div class="van-hairline--bottom">已参与{{ normalCoupons.total }}人</div>
+      <div>
+        <van-notice-bar :scrollable="false" style="padding: 0; height: 60px">
+          <van-swipe
+            class="notice-swipe"
+            vertical
+            :autoplay="3000"
+            :show-indicators="false"
+          >
+            <van-swipe-item
+              v-for="i in Math.ceil(normalCoupons.coupons.length / 2)"
+              :key="i"
+            >
+              <div class="swipe-item">
+                <div class="row" v-for="j in 2" :key="j">
+                  <van-image
+                    height="25px"
+                    fit="cover"
+                    round
+                    :src="
+                      normalCoupons.coupons[
+                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                      ].participant.participant_info.avatar
+                    "
+                  />
+                  <div style="margin-right: 0.5rem">
+                    {{
+                      normalCoupons.coupons[
+                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                      ].participant.participant_info.name
+                    }}
+                  </div>
+                  <div style="margin-right: 0.5rem">
+                    {{
+                      normalCoupons.coupons[
+                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                      ].participant.license_plate_number.replace(
+                        /^(..)(.*)(.)$/,
+                        "$1**$3"
+                      )
+                    }}
+                  </div>
+                  <div style="margin-right: 0.5rem">
+                    {{
+                      normalCoupons.coupons[
+                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                      ].created_at
+                    }}
+                  </div>
+                  <div>
+                    已支付{{
+                      normalCoupons.coupons[
+                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                      ].value
+                    }}元
+                  </div>
+                </div>
+              </div>
+            </van-swipe-item>
+          </van-swipe>
+        </van-notice-bar>
+      </div>
+    </template>
 
     <div class="coupon-buttons">
       <div @click="showCoupons = true">
@@ -346,38 +405,50 @@ export default {
     },
     availableCoupons() {
       if (this.user.id && this.activity.id) {
-        return this.user.coupons.filter((coupon) => {
-          return (
+        return this.user.coupons.filter(
+          (coupon) =>
             coupon.activity_id == this.activity.id &&
             this.$dayjs().isBefore(this.activity.expire_at) &&
             coupon.type == "normal"
-          );
-        });
+        );
       }
       return [];
     },
     sharedCoupons() {
       if (this.user.id && this.activity.id) {
-        return this.user.coupons.filter((coupon) => {
-          return (
+        return this.user.coupons.filter(
+          (coupon) =>
             coupon.activity_id == this.activity.id &&
             this.$dayjs().isBefore(this.activity.expire_at) &&
             coupon.type == "shared"
-          );
-        });
+        );
       }
       return [];
     },
     expiredCoupons() {
       if (this.user.id && this.activity.id) {
-        return this.user.coupons.filter((coupon) => {
-          return (
+        return this.user.coupons.filter(
+          (coupon) =>
             coupon.activity_id == this.activity.id &&
             !this.$dayjs().isBefore(this.activity.expire_at)
-          );
-        });
+        );
       }
       return [];
+    },
+    normalCoupons() {
+      if (this.activity.id) {
+        let coupons = this.activity.coupons.filter(
+          (coupon) => coupon.type == "normal"
+        );
+        return {
+          total: coupons.length,
+          coupons: coupons.slice(0, 50),
+        };
+      }
+      return {
+        total: 0,
+        coupons: [],
+      };
     },
   },
   methods: {
@@ -583,6 +654,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.notice-swipe {
+  height: 60px;
+  line-height: 60px;
+  .swipe-item {
+    height: 60px;
+    line-height: 60px;
+    display: flex;
+    flex-direction: column;
+    .row {
+      height: 30px;
+      line-height: 30px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
 .participant-avatar {
   display: flex;
   flex-wrap: wrap;
