@@ -578,20 +578,6 @@ export default {
       window.location.href.match(/(?<=\/activity\/)(\d+)/g) ||
       localStorage.activityId;
 
-    this.axios
-      .get(this.$api + "activity/" + localStorage.activityId)
-      .then((response) => {
-        document.title = response.data.title;
-        if (!this.$dayjs().isBefore(response.data.end_at)) {
-          response.data.state = "ended";
-        } else {
-          response.data.state = "inProgress";
-        }
-        this.activity = response.data;
-        this.$emit("updateShareData");
-        localStorage.activityId = response.data.id;
-      });
-
     localStorage.inviter =
       window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
       localStorage.inviter;
@@ -602,31 +588,49 @@ export default {
     if (!localStorage.temporaryId) {
       localStorage.temporaryId = this.$uuid.v1();
     }
-    this.axios
-      .post(this.$api + "login", {
-        temporaryId: localStorage.temporaryId,
-      })
-      .then((response) => {
-        if (response.status == 204) {
-          this.axios
-            .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
-            .then((response) => {
-              window.location.href = response.data;
-            });
-        } else if (response.status == 200) {
-          this.user = response.data;
-          this.$emit("updateShareData");
-          if (
-            localStorage.activityId &&
-            localStorage.activityId != "undefined"
-          ) {
-            this.axios.post(this.$api + "activity/participate", {
-              userId: this.user.id,
-              activityId: localStorage.activityId,
-            });
+
+    this.$wx.ready(() => {
+      this.axios
+        .get(this.$api + "activity/" + localStorage.activityId)
+        .then((response) => {
+          document.title = response.data.title;
+          if (!this.$dayjs().isBefore(response.data.end_at)) {
+            response.data.state = "ended";
+          } else {
+            response.data.state = "inProgress";
           }
-        }
-      });
+          this.activity = response.data;
+          this.$emit("updateShareData");
+          localStorage.activityId = response.data.id;
+        });
+      this.axios
+        .post(this.$api + "login", {
+          temporaryId: localStorage.temporaryId,
+        })
+        .then((response) => {
+          if (response.status == 204) {
+            this.axios
+              .get(
+                this.$api + "wechat/redirect_uri/" + localStorage.temporaryId
+              )
+              .then((response) => {
+                window.location.href = response.data;
+              });
+          } else if (response.status == 200) {
+            this.user = response.data;
+            this.$emit("updateShareData");
+            if (
+              localStorage.activityId &&
+              localStorage.activityId != "undefined"
+            ) {
+              this.axios.post(this.$api + "activity/participate", {
+                userId: this.user.id,
+                activityId: localStorage.activityId,
+              });
+            }
+          }
+        });
+    });
 
     this.$on("updateShareData", () => {
       if (this.user.id && this.activity.id) {
@@ -654,7 +658,6 @@ export default {
         this.$wx.config({
           ...response.data,
         });
-        this.$emit("updateShareData");
       });
   },
 };
