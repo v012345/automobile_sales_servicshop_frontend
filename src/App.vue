@@ -549,14 +549,24 @@ export default {
     },
 
     generatePoster() {
+      if (this.poster.src) {
+        this.poster.show = true;
+        return;
+      }
       if (this.user.id && this.activity.id) {
+        Toast.loading({
+          message: "正在为您生成海报",
+          forbidClick: true,
+          duration: 0,
+        });
+
         this.axios
           .get(
             this.$api +
               `activity/${this.activity.id}/participant/${this.user.id}/poster/`
           )
           .then((response) => {
-            // console.log(response.data);
+            Toast.clear();
             this.poster.src = response.data;
             this.poster.show = true;
           });
