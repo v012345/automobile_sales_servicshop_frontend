@@ -627,8 +627,6 @@ export default {
         }
       });
 
-    this.$wx.ready(() => {});
-
     this.$on("updateShareData", () => {
       if (this.user.id && this.activity.id) {
         let config = {
@@ -639,7 +637,6 @@ export default {
             `activity/${this.activity.id}/inviter/${this.user.id}`,
           imgUrl: this.$backend + this.activity.poster,
         };
-        console.log(config);
         // this.$wx.updateAppMessageShareData(config);
         this.$wx.updateTimelineShareData(config);
         this.$wx.onMenuShareAppMessage(config);
