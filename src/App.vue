@@ -629,7 +629,6 @@ export default {
       });
 
     this.$on("updateShareData", () => {
-      console.log(1111);
       if (this.user.id && this.activity.id) {
         let config = {
           title: this.activity.title,
