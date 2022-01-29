@@ -45,9 +45,8 @@
         right-icon="location-o"
       />
     </van-form>
-    <div>
-      <h3>信息登记处</h3>
-    </div>
+    <h3 ref="sign_up_form">信息登记处</h3>
+
     <van-form>
       <van-field
         v-model.trim="sign_up_form.licensePlateNumber"
@@ -469,6 +468,7 @@ export default {
         )
       ) {
         Toast({ message: "请登记完整信息" });
+        this.$refs.sign_up_form.scrollIntoView({ behavior: "smooth" });
         return;
       }
       this.axios
