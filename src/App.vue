@@ -582,6 +582,7 @@ export default {
       .get(this.$api + "activity/" + localStorage.activityId)
       .then((response) => {
         document.title = response.data.title;
+        this.$emit("updateShareData");
         if (!this.$dayjs().isBefore(response.data.end_at)) {
           response.data.state = "ended";
         } else {
@@ -615,6 +616,7 @@ export default {
             });
         } else if (response.status == 200) {
           this.user = response.data;
+          this.$emit("updateShareData");
           if (
             localStorage.activityId &&
             localStorage.activityId != "undefined"
@@ -627,27 +629,19 @@ export default {
         }
       });
 
-    this.$wx.ready(() => {
-      //需在用户可能点击分享按钮前就先调用
-      this.$wx.updateAppMessageShareData({
-        title: this.activity.title,
-        desc: this.activity.description,
-        link:
-          this.$domain + `activity/${this.activity.id}/inviter/${this.user.id}`,
-        imgUrl: this.activity.poster,
-        success: () => {
-          // Toast({ message: "updateAppMessageShareData" });
-        },
-      });
-      this.$wx.updateTimelineShareData({
-        title: this.activity.title,
-        link:
-          this.$domain + `activity/${this.activity.id}/inviter/${this.user.id}`,
-        imgUrl: this.activity.poster,
-        success: () => {
-          // Toast({ message: "updateTimelineShareData" });
-        },
-      });
+    this.$on("updateShareData", () => {
+      if (this.user.id && this.activity.id) {
+        let config = {
+          title: this.activity.title,
+          desc: this.activity.description,
+          link:
+            this.$domain +
+            `activity/${this.activity.id}/inviter/${this.user.id}`,
+          imgUrl: this.activity.poster,
+        };
+        this.$wx.updateAppMessageShareData(config);
+        this.$wx.updateTimelineShareData(config);
+      }
     });
 
     this.axios
@@ -660,6 +654,7 @@ export default {
         this.$wx.config({
           ...response.data,
         });
+        this.$emit("updateShareData");
       });
   },
 };
