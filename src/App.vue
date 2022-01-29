@@ -581,6 +581,7 @@ export default {
     this.axios
       .get(this.$api + "activity/" + localStorage.activityId)
       .then((response) => {
+        document.title = response.data.title;
         if (!this.$dayjs().isBefore(response.data.end_at)) {
           response.data.state = "ended";
         } else {
