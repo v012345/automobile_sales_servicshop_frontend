@@ -631,13 +631,14 @@ export default {
 
     this.$on("updateShareData", () => {
       if (this.user.id && this.activity.id) {
+        config.log(1111);
         let config = {
           title: this.activity.title,
           desc: this.activity.description,
           link:
             this.$domain +
             `activity/${this.activity.id}/inviter/${this.user.id}`,
-          imgUrl: this.activity.poster,
+          imgUrl: this.$backend + this.activity.poster,
         };
         this.$wx.updateAppMessageShareData(config);
         this.$wx.updateTimelineShareData(config);
