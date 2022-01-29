@@ -589,7 +589,6 @@ export default {
           response.data.state = "inProgress";
         }
         this.activity = response.data;
-        console.log(this.activity);
         localStorage.activityId = response.data.id;
       });
 
@@ -630,8 +629,8 @@ export default {
       });
 
     this.$on("updateShareData", () => {
+      console.log(1111);
       if (this.user.id && this.activity.id) {
-        config.log(1111);
         let config = {
           title: this.activity.title,
           desc: this.activity.description,
@@ -640,6 +639,7 @@ export default {
             `activity/${this.activity.id}/inviter/${this.user.id}`,
           imgUrl: this.$backend + this.activity.poster,
         };
+        console.log(config);
         this.$wx.updateAppMessageShareData(config);
         this.$wx.updateTimelineShareData(config);
       }
