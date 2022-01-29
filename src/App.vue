@@ -608,7 +608,7 @@ export default {
             localStorage.activityId &&
             localStorage.activityId != "undefined"
           ) {
-            this.axios.post(this.$api + "user/activity", {
+            this.axios.post(this.$api + "activity/participate", {
               userId: this.user.id,
               activityId: localStorage.activityId,
             });
