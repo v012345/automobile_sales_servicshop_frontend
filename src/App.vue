@@ -582,13 +582,13 @@ export default {
       .get(this.$api + "activity/" + localStorage.activityId)
       .then((response) => {
         document.title = response.data.title;
-        this.$emit("updateShareData");
         if (!this.$dayjs().isBefore(response.data.end_at)) {
           response.data.state = "ended";
         } else {
           response.data.state = "inProgress";
         }
         this.activity = response.data;
+        this.$emit("updateShareData");
         localStorage.activityId = response.data.id;
       });
 
