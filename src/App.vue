@@ -240,7 +240,7 @@
           <van-tab title="活动说明">
             <div style="margin-top: 1rem">
               <van-button round type="default">参与记录</van-button>
-              <div v-if="haveACoupon">
+              <div v-if="haveACoupon && availableCoupons.length > 0">
                 {{ availableCoupons[0].created_at }}参加活动
               </div>
               <div v-else>未参加</div>
