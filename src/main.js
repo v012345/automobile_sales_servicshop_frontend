@@ -25,12 +25,12 @@ new Vue({
     Vue.prototype.$bus = this;
     Vue.prototype.$wx = wx;
     Vue.prototype.$dayjs = dayjs;
-    // Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
-    // Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
-    // Vue.prototype.$domain = "http://amap.100pq.cn/";
-    Vue.prototype.$api = "http://192.168.31.84/api/";
-    Vue.prototype.$backend = "http://192.168.31.84";
-    Vue.prototype.$domain = "http://192.168.31.84:8080/";
+    Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
+    Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
+    Vue.prototype.$domain = "http://amap.100pq.cn/";
+    // Vue.prototype.$api = "http://192.168.31.84/api/";
+    // Vue.prototype.$backend = "http://192.168.31.84";
+    // Vue.prototype.$domain = "http://192.168.31.84:8080/";
     // Vue.prototype.$qrcode = require('jr-qrcode');
     Vue.prototype.$qrcode = jrQrcode;
   },
