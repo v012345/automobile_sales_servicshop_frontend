@@ -7,8 +7,8 @@
         height="300"
         controls="controls"
         x5-video-player-fullscreen="false"
-        x5-playsinline=""
-        playsinline=""
+        x5-playsinline
+        playsinline
         webkit-playsinline="true"
         :poster="$backend + activity.video_thumbnail"
       >
@@ -19,12 +19,7 @@
     </template>
 
     <van-form>
-      <van-field
-        v-model="activity.shop"
-        label="门店名称"
-        readonly
-        placeholder="门店名称"
-      />
+      <van-field v-model="activity.shop" label="门店名称" readonly placeholder="门店名称" />
       <van-field
         @click="call(activity.tel)"
         clickable
@@ -54,24 +49,9 @@
         label="车牌号"
         placeholder="车牌号"
       />
-      <van-field
-        required
-        v-model.trim="sign_up_form.phoneNumber"
-        label="手机号"
-        placeholder="手机号"
-      />
-      <van-field
-        required
-        v-model.trim="sign_up_form.name"
-        label="姓名"
-        placeholder="姓名"
-      />
-      <van-field
-        required
-        v-model.trim="sign_up_form.carModel"
-        label="车型"
-        placeholder="车型"
-      />
+      <van-field required v-model.trim="sign_up_form.phoneNumber" label="手机号" placeholder="手机号" />
+      <van-field required v-model.trim="sign_up_form.name" label="姓名" placeholder="姓名" />
+      <van-field required v-model.trim="sign_up_form.carModel" label="车型" placeholder="车型" />
     </van-form>
     <div class="count-down">
       <img src="./assets/countdown.png" />
@@ -80,11 +60,7 @@
           <div>报名参加活动</div>
           <div>活动倒计时</div>
           <div>
-            <van-count-down
-              @finish="activityEnds"
-              :time="countDown"
-              format="DD 天 HH时 mm分 ss秒"
-            />
+            <van-count-down @finish="activityEnds" :time="countDown" format="DD 天 HH时 mm分 ss秒" />
           </div>
         </template>
         <template v-else>
@@ -94,16 +70,10 @@
       </div>
     </div>
 
-    <template v-if="activity.id"
-      ><div class="van-hairline--bottom">
-        已有{{ activity.participants.length }}人关注
-      </div>
+    <template v-if="activity.id">
+      <div class="van-hairline--bottom">已有{{ activity.participants.length }}人关注</div>
       <div class="participant-avatar">
-        <div
-          class="avatar"
-          v-for="i in Math.min(33, activity.participants.length)"
-          :key="i.id"
-        >
+        <div class="avatar" v-for="i in Math.min(33, activity.participants.length)" :key="i.id">
           <van-image
             width="90%"
             round
@@ -115,16 +85,8 @@
       <div class="van-hairline--bottom">已参与{{ normalCoupons.total }}人</div>
       <div>
         <van-notice-bar :scrollable="false" style="padding: 0; height: 60px">
-          <van-swipe
-            class="notice-swipe"
-            vertical
-            :autoplay="3000"
-            :show-indicators="false"
-          >
-            <van-swipe-item
-              v-for="i in Math.ceil(normalCoupons.coupons.length / 2)"
-              :key="i"
-            >
+          <van-swipe class="notice-swipe" vertical :autoplay="3000" :show-indicators="false">
+            <van-swipe-item v-for="i in Math.ceil(normalCoupons.coupons.length / 2)" :key="i">
               <div class="swipe-item">
                 <div class="row" v-for="j in 2" :key="j">
                   <div class="avatar">
@@ -190,11 +152,7 @@
     </div>
 
     <template v-if="activity.id">
-      <van-image
-        v-for="(image, i) in activity.propaganda_images"
-        :key="i"
-        :src="$backend + image"
-      />
+      <van-image v-for="(image, i) in activity.propaganda_images" :key="i" :src="$backend + image" />
     </template>
 
     <div class="footer">由****提供技术支持</div>
@@ -240,9 +198,9 @@
           <van-tab title="活动说明">
             <div style="margin-top: 1rem">
               <van-button round type="default">参与记录</van-button>
-              <div v-if="haveACoupon && availableCoupons.length > 0">
-                {{ availableCoupons[0].created_at }}参加活动
-              </div>
+              <div
+                v-if="haveACoupon && availableCoupons.length > 0"
+              >{{ availableCoupons[0].created_at }}参加活动</div>
               <div v-else>未参加</div>
             </div>
             <div>
@@ -264,13 +222,16 @@
                 :available="true"
               ></Coupon>
             </div>
-          </van-tab> </van-tabs
-      ></van-popup>
+          </van-tab>
+        </van-tabs>
+      </van-popup>
     </div>
 
     <div>
       <van-popup v-model="poster.show" closeable>
-        <div class="poster"><van-image width="100%" :src="poster.src" /></div>
+        <div class="poster">
+          <van-image width="100%" :src="poster.src" />
+        </div>
       </van-popup>
     </div>
 
@@ -312,8 +273,9 @@
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
                 :available="coupon.state == 'available'"
-              ></Coupon></div
-          ></van-tab>
+              ></Coupon>
+            </div>
+          </van-tab>
           <van-tab title="失效的" name="expired">
             <div v-for="coupon in expiredCoupons" :key="coupon.id">
               <Coupon
@@ -321,8 +283,9 @@
                 :allow_to_use_at="activity.allow_to_use_at"
                 :expire_at="activity.expire_at"
                 :available="false"
-              ></Coupon></div
-          ></van-tab>
+              ></Coupon>
+            </div>
+          </van-tab>
         </van-tabs>
       </van-popup>
     </div>
@@ -368,7 +331,7 @@ export default {
     Coupon,
   },
   watch: {
-    activity() {},
+    activity() { },
   },
   computed: {
     haveACoupon() {
@@ -563,7 +526,7 @@ export default {
         this.axios
           .get(
             this.$api +
-              `activity/${this.activity.id}/participant/${this.user.id}/poster/`
+            `activity/${this.activity.id}/participant/${this.user.id}/poster/`
           )
           .then((response) => {
             Toast.clear();
@@ -626,19 +589,19 @@ export default {
           }
         }
       });
-
     this.$on("updateShareData", () => {
       if (this.user.id && this.activity.id) {
         let config = {
           title: this.activity.title,
           desc: this.activity.description,
           link:
-            this.$domain +
-            `activity/${this.activity.id}/inviter/${this.user.id}`,
+            window.location.origin +
+            `/activity/${this.activity.id}/inviter/${this.user.id}`,
           imgUrl: this.$backend + this.activity.poster,
         };
         // this.$wx.updateAppMessageShareData(config);
         this.$wx.updateTimelineShareData(config);
+        config.title = `${this.user.name}向您推荐${this.activity.title}`;
         this.$wx.onMenuShareAppMessage(config);
       }
     });
