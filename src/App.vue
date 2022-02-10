@@ -71,7 +71,9 @@
     </div>
 
     <template v-if="activity.id">
-      <div class="van-hairline--bottom">已有{{ activity.participants.length }}人关注</div>
+      <div
+        class="van-hairline--bottom"
+      >已有{{ activity.participants.length + activity.offset.participants }}人关注</div>
       <div class="participant-avatar">
         <div class="avatar" v-for="i in Math.min(33, activity.participants.length)" :key="i.id">
           <van-image
@@ -82,7 +84,7 @@
           />
         </div>
       </div>
-      <div class="van-hairline--bottom">已参与{{ normalCoupons.total }}人</div>
+      <div class="van-hairline--bottom">已参与{{ normalCoupons.total + activity.offset.coupons }}人</div>
       <div>
         <van-notice-bar :scrollable="false" style="padding: 0; height: 60px">
           <van-swipe class="notice-swipe" vertical :autoplay="3000" :show-indicators="false">
@@ -155,7 +157,7 @@
       <van-image v-for="(image, i) in activity.propaganda_images" :key="i" :src="$backend + image" />
     </template>
 
-    <div class="footer">由****提供技术支持</div>
+    <div class="footer">由{{ config.tech_surppot }}提供技术支持</div>
 
     <div class="share-button" @click="generatePoster">
       <van-icon size="40" color="#b8b8b8" name="share-o" />
@@ -209,7 +211,7 @@
             </div>
             <div>
               <van-button round type="default">技术支持</van-button>
-              <div>页面技术由"***"提供</div>
+              <div>页面技术由{{ config.tech_surppot }}提供</div>
             </div>
           </van-tab>
           <van-tab title="我的奖品">
@@ -312,6 +314,7 @@ export default {
       inviter: undefined,
       showIntroduction: false,
       user: {},
+      config: {},
       activity: {},
 
       poster: {
@@ -551,6 +554,11 @@ export default {
     if (!localStorage.temporaryId) {
       localStorage.temporaryId = this.$uuid.v1();
     }
+
+    this.axios.get(this.$api + "system/config").then((response) => {
+      this.config = response.data
+    });
+
     this.axios
       .get(this.$api + "activity/" + localStorage.activityId)
       .then((response) => {
@@ -592,7 +600,7 @@ export default {
     this.$on("updateShareData", () => {
       if (this.user.id && this.activity.id) {
         let config = {
-          title: this.activity.title,
+          title: `${this.user.name}向您分享${this.activity.title}`,
           desc: this.activity.description,
           link:
             window.location.origin +
@@ -601,7 +609,6 @@ export default {
         };
         // this.$wx.updateAppMessageShareData(config);
         this.$wx.updateTimelineShareData(config);
-        config.title = `${this.user.name}向您推荐${this.activity.title}`;
         this.$wx.onMenuShareAppMessage(config);
       }
     });
