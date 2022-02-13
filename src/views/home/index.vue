@@ -372,10 +372,7 @@ export default {
             if (!(this.user.id && this.activity.id)) {
                 return;
             }
-            this.$Echo.channel(`broadcast-test`)
-                .listen('Test', (e) => {
-                    console.log(e);
-                });
+
 
             if (
                 !(
@@ -404,19 +401,25 @@ export default {
                         ...response.data,
                         timestamp: response.data.timeStamp,
                         success: () => {
+                            this.$Echo.channel(`paid`)
+                                .listen('Paid', (e) => {
+                                    Toast({ message: e.user_id });
+                                    if (e.user_id == this.user.id) {
+                                        this.axios
+                                            .post(this.$api + "login", {
+                                                temporaryId: localStorage.temporaryId,
+                                            })
+                                            .then((response) => {
+                                                if (response.status == 200) {
+                                                    this.$store.dispatch("setUser", response.data)
+                                                    // this.user = response.data;
+                                                }
+                                            });
+                                    }
+
+                                });
                             //起websocket的,等之后吧
-                            setTimeout(() => {
-                                this.axios
-                                    .post(this.$api + "login", {
-                                        temporaryId: localStorage.temporaryId,
-                                    })
-                                    .then((response) => {
-                                        if (response.status == 200) {
-                                            this.$store.dispatch("setUser", response.data)
-                                            // this.user = response.data;
-                                        }
-                                    });
-                            }, 3000);
+
                         },
                     });
                 });
