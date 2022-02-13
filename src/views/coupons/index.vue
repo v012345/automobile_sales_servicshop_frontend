@@ -27,6 +27,7 @@
                             :value="coupon.value"
                             :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at"
+                            :description="activity.description"
                             :available="coupon.state == 'available'"
                         ></Coupon>
                     </div>
@@ -37,6 +38,7 @@
                             :value="coupon.value"
                             :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at"
+                            :description="activity.description"
                             :available="false"
                         ></Coupon>
                     </div>
@@ -111,6 +113,23 @@ export default {
             Toast({ message: "此券已经核销" });
         },
     },
+    created() {
+        this.$Echo.channel(`4s`)
+            .listen('Used', (e) => {
+                if (e.user_id == this.user.id) {
+                    this.showQrcode = false;
+                    this.axios
+                        .post(this.$api + "login", {
+                            temporaryId: localStorage.temporaryId,
+                        })
+                        .then((response) => {
+                            if (response.status == 200) {
+                                this.$store.dispatch("setUser", response.data)
+                            }
+                        });
+                }
+            });
+    }
 
 }
 </script>

@@ -401,33 +401,7 @@ export default {
                         ...response.data,
                         timestamp: response.data.timeStamp,
                         success: () => {
-                            this.$Echo.channel(`paid`)
-                                .listen('Paid', (e) => {
-                                    Toast({ message: e.user_id });
-                                    if (e.user_id == this.user.id) {
-                                        this.axios
-                                            .post(this.$api + "login", {
-                                                temporaryId: localStorage.temporaryId,
-                                            })
-                                            .then((response) => {
-                                                if (response.status == 200) {
-                                                    this.$store.dispatch("setUser", response.data)
-                                                }
-                                            });
-                                        this.axios
-                                            .get(this.$api + "activity/" + this.activity.id)
-                                            .then((response) => {
-                                                if (!this.$dayjs().isBefore(response.data.end_at)) {
-                                                    response.data.state = "ended";
-                                                } else {
-                                                    response.data.state = "inProgress";
-                                                }
-                                                this.$store.dispatch("setActivity", response.data);
-                                            });
-                                    }
 
-                                });
-                            //起websocket的,等之后吧
 
                         },
                     });
@@ -496,7 +470,31 @@ export default {
         },
     },
     mounted() {
-
+        this.$Echo.channel(`4s`)
+            .listen('Paid', (e) => {
+              
+                if (e.user_id == this.user.id) {
+                    this.axios
+                        .post(this.$api + "login", {
+                            temporaryId: localStorage.temporaryId,
+                        })
+                        .then((response) => {
+                            if (response.status == 200) {
+                                this.$store.dispatch("setUser", response.data)
+                            }
+                        });
+                    this.axios
+                        .get(this.$api + "activity/" + this.activity.id)
+                        .then((response) => {
+                            if (!this.$dayjs().isBefore(response.data.end_at)) {
+                                response.data.state = "ended";
+                            } else {
+                                response.data.state = "inProgress";
+                            }
+                            this.$store.dispatch("setActivity", response.data);
+                        });
+                }
+            });
     },
 };
 </script>
