@@ -135,7 +135,12 @@
                                             ].participant.participant_info.name
                                         }}
                                     </div>
-                                    <div style="margin-right: 0.5rem">
+                                    <div
+                                        style="margin-right: 0.5rem"
+                                        v-if="normalCoupons.coupons[
+                                            (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                        ].participant.license_plate_number"
+                                    >
                                         {{
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
