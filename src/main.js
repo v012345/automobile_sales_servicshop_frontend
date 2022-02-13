@@ -11,6 +11,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import wx from 'weixin-js-sdk';
 import UUID from "vue-uuid";
 import jrQrcode from "jr-qrcode"
+import store from './store'
 
 
 
@@ -25,11 +26,11 @@ new Vue({
     Vue.prototype.$bus = this;
     Vue.prototype.$wx = wx;
     Vue.prototype.$dayjs = dayjs;
-    // Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
-    // Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
+    Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
+    Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
 
-    Vue.prototype.$api = "http://192.168.31.84/api/";
-    Vue.prototype.$backend = "http://192.168.31.84";
+    // Vue.prototype.$api = "http://192.168.31.84/api/";
+    // Vue.prototype.$backend = "http://192.168.31.84";
 
     // Vue.prototype.$domain = "http://amap.100pq.cn/";
     // Vue.prototype.$qrcode = require('jr-qrcode');
@@ -41,4 +42,5 @@ new Vue({
 
   render: h => h(App),
   router,
+  store
 }).$mount('#app')
