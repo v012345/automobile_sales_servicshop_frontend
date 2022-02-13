@@ -401,8 +401,6 @@ export default {
                         ...response.data,
                         timestamp: response.data.timeStamp,
                         success: () => {
-
-
                         },
                     });
                 });
@@ -472,9 +470,7 @@ export default {
     mounted() {
         this.$Echo.channel(`4s`)
             .listen('Paid', (e) => {
-
                 if (e.user_id == this.user.id) {
-                    Toast({ message: e.user_id });
                     this.axios
                         .post(this.$api + "login", {
                             temporaryId: localStorage.temporaryId,

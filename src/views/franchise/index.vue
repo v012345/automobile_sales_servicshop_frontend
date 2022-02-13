@@ -1,5 +1,5 @@
 <template>
-    <div></div>
+    <div>加盟</div>
 </template>
 
 <script>

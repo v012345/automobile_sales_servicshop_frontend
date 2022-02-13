@@ -5,15 +5,19 @@ import VueRouter from 'vue-router'
 
 //创建并暴露一个路由器
 export default new VueRouter({
-	mode: 'history',
-	routes: [
-		{
-			path: '/coupons',
-			component: () => import('@/views/coupons/index')
-		},
-		{
-			path: '*',
-			component: () => import('@/views/home/index')
-		}
-	]
+    mode: 'history',
+    routes: [
+        {
+            path: '/coupons',
+            component: () => import('@/views/coupons/index')
+        },
+        {
+            path: '/franchise',
+            component: () => import('@/views/franchise/index')
+        },
+        {
+            path: '*',
+            component: () => import('@/views/home/index')
+        }
+    ]
 })
