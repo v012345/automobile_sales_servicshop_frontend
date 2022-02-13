@@ -19,6 +19,7 @@
     "vue-axios": "^3.4.0",
     "vue-router": "^3.5.3",
     "vue-uuid": "^2.0.2",
+    "vuex": "^3.6.2",
     "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {
