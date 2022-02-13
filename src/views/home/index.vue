@@ -278,7 +278,7 @@ export default {
     name: "Home",
     data() {
         return {
-            inviter: undefined,
+
             showIntroduction: false,
 
             poster: {
@@ -296,11 +296,12 @@ export default {
     },
     components: {
         Coupon,
+
     },
     watch: {
     },
     computed: {
-        ...mapState(['activity', 'user', "config"]),
+        ...mapState(['activity', 'user', "config", "inviter"]),
         haveACoupon() {
             if (this.user.id && this.activity.id) {
                 let coupons = this.user.coupons.filter((coupon) => {
@@ -371,6 +372,10 @@ export default {
             if (!(this.user.id && this.activity.id)) {
                 return;
             }
+            this.$Echo.channel(`broadcast-test`)
+                .listen('Test', (e) => {
+                    console.log(e);
+                });
 
             if (
                 !(
@@ -386,7 +391,7 @@ export default {
             }
             this.axios
                 .post(this.$api + "pay", {
-                    amount: 0.01,
+                    amount: this.activity.signing_up_fee,
                     payer: this.user.id,
                     open_id: this.user.open_id,
                     activityId: this.activity.id,

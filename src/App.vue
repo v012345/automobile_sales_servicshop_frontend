@@ -36,19 +36,15 @@ export default {
       window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
       localStorage.inviter;
 
-    console.log("activity", localStorage.activityId)
-    console.log("inviter", localStorage.inviter)
-    console.log("temporaryId", localStorage.temporaryId)
+    this.$store.dispatch("setInviter", localStorage.inviter)
 
-    if (localStorage.inviter != "undefined") {
-      this.inviter = localStorage.inviter;
-    }
+    // if (localStorage.inviter != "undefined") {
+    //   this.inviter = localStorage.inviter;
+    // }
 
     if (!localStorage.temporaryId) {
       localStorage.temporaryId = this.$uuid.v1();
     }
-
-
 
     this.axios
       .get(this.$api + "activity/" + localStorage.activityId)

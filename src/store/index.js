@@ -15,6 +15,10 @@ const actions = {
     setUser(context, value) {
         context.commit("SET_USER", value)
     },
+    setInviter(context, value) {
+        if (value == "undefined") return;
+        context.commit("SET_INVITER", parseInt(value))
+    },
 }
 const mutations = {
     ADD(state, value) {
@@ -28,13 +32,17 @@ const mutations = {
     },
     SET_USER(state, value) {
         state.user = value
+    },
+    SET_INVITER(state, value) {
+        state.inviter = value
     }
 }
 const state = {
     sum: 1,
     user: {},
     config: {},
-    activity: {}
+    activity: {},
+    inviter: undefined,
 }
 // 类似与计算属性
 const getters = {

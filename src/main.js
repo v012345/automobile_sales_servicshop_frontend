@@ -12,6 +12,7 @@ import wx from 'weixin-js-sdk';
 import UUID from "vue-uuid";
 import jrQrcode from "jr-qrcode"
 import store from './store'
+import Echo from "laravel-echo"
 
 
 
@@ -26,15 +27,25 @@ new Vue({
     Vue.prototype.$bus = this;
     Vue.prototype.$wx = wx;
     Vue.prototype.$dayjs = dayjs;
-    Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
-    Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
+    // Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
+    // Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
 
-    // Vue.prototype.$api = "http://192.168.31.84/api/";
-    // Vue.prototype.$backend = "http://192.168.31.84";
+    Vue.prototype.$api = "http://192.168.31.84/api/";
+    Vue.prototype.$backend = "http://192.168.31.84";
 
     // Vue.prototype.$domain = "http://amap.100pq.cn/";
     // Vue.prototype.$qrcode = require('jr-qrcode');
+
     Vue.prototype.$qrcode = jrQrcode;
+
+    Vue.prototype.$Pusher = require("pusher-js")
+    Vue.prototype.$Echo = new Echo({
+      broadcaster: 'pusher',
+      key: "ShdHLAikrhOsNRg9",
+      wsHost: "api.nightowl.name",
+      wsPort: 6001,
+      forceTLS: false
+    });
   },
   mounted() {
 
