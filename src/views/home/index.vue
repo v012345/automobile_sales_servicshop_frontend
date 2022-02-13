@@ -412,8 +412,17 @@ export default {
                                             .then((response) => {
                                                 if (response.status == 200) {
                                                     this.$store.dispatch("setUser", response.data)
-                                                    // this.user = response.data;
                                                 }
+                                            });
+                                        this.axios
+                                            .get(this.$api + "activity/" + this.activity.id)
+                                            .then((response) => {
+                                                if (!this.$dayjs().isBefore(response.data.end_at)) {
+                                                    response.data.state = "ended";
+                                                } else {
+                                                    response.data.state = "inProgress";
+                                                }
+                                                this.$store.dispatch("setActivity", response.data);
                                             });
                                     }
 
