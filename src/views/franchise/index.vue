@@ -26,9 +26,9 @@
             <van-field label="职位">
                 <template #input>
                     <van-radio-group v-model="form.job_title" direction="horizontal">
-                        <van-radio name="市场经理">市场经理</van-radio>
                         <van-radio name="店总">店总</van-radio>
-                        <van-radio name="售后经理">售后经理</van-radio>
+                        <van-radio name="市场">市场</van-radio>
+                        <van-radio name="售后">售后</van-radio>
                         <van-radio name="其他">其他</van-radio>
                     </van-radio-group>
                 </template>
