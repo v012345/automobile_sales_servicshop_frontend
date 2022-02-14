@@ -189,6 +189,9 @@
                 :src="$backend + image"
             />
         </template>
+        <div style="display:flex;justify-content:center">
+            <img @click="franchise" width="35%" src="@/assets/apply_button.png" />
+        </div>
 
         <div class="footer">由{{ config.tech_surppot }}提供技术支持</div>
 
@@ -363,6 +366,9 @@ export default {
     methods: {
         toCouponsView() {
             this.$router.push('/coupons')
+        },
+        franchise() {
+            this.$router.push('/franchise')
         },
         locate(coordinate) {
             this.$wx.openLocation({
