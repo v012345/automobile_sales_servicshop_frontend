@@ -484,6 +484,7 @@ export default {
         },
     },
     mounted() {
+        this.sign_up_form.licensePlateNumber = this.activity.prefix
         this.$Echo.channel(`4s`)
             .listen('Paid', (e) => {
                 if (e.user_id == this.user.id) {
