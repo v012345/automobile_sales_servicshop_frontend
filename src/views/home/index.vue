@@ -194,7 +194,7 @@
             />
         </template>
         <div style="display:flex;justify-content:center">
-            <img @click="franchise" width="35%" src="@/assets/apply_button.png" />
+            <img @click="franchise" width="150px" height="45px" src="@/assets/apply_button.png" />
         </div>
 
         <div class="footer">由{{ config.tech_surppot }}提供技术支持</div>
