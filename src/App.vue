@@ -28,13 +28,27 @@ export default {
     this.axios.get(this.$api + "system/config").then((response) => {
       this.$store.dispatch("setConfig", response.data)
     });
-    localStorage.activityId =
-      window.location.href.match(/(?<=\/activity\/)(\d+)/g) ||
-      localStorage.activityId;
 
-    localStorage.inviter =
-      window.location.href.match(/(?<=\/inviter\/)(\d+)/g) ||
-      localStorage.inviter;
+
+    // localStorage.activityId =
+    //   window.location.href.match(RegExp("(?<=/activity/)([0-9]+)", 'g'))
+
+    let result = window.location.href.match(RegExp("(/activity/)([0-9]+)"));
+    if (result) {
+      localStorage.activityId = result[result.length - 1]
+    }
+
+
+    result = window.location.href.match(RegExp("(/inviter/)([0-9]+)"));
+    if (result) {
+      localStorage.inviter = result[result.length - 1]
+    }
+
+    // localStorage.activityId =
+    //   window.location.href.match(/(?<=\/activity\/)(\d+)/g) 
+
+    // localStorage.inviter =
+    //   window.location.href.match(/(?<=\/inviter\/)(\d+)/g) 
 
     this.$store.dispatch("setInviter", localStorage.inviter)
 
