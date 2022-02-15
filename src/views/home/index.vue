@@ -54,6 +54,7 @@
                 v-model.trim="sign_up_form.phoneNumber"
                 label="手机号"
                 placeholder="手机号"
+                type="number"
             />
             <van-field required v-model.trim="sign_up_form.name" label="姓名" placeholder="姓名" />
             <van-field required v-model.trim="sign_up_form.carModel" label="车型" placeholder="车型" />
