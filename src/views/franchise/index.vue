@@ -12,18 +12,20 @@
                 placeholder="区域选择"
                 @click="showCityPicker = true"
             />
-            <van-field
+            <!-- <van-field
                 v-model="form.brand"
                 is-link
                 readonly
                 label="品牌"
                 placeholder="品牌选择"
                 @click="showBrandPicker = true"
-            />
+            />-->
+            <van-field v-model="form.brand" label="品牌" />
             <van-field v-model="form.shop" label="店名" />
             <van-field v-model="form.name" label="姓名" />
             <van-field v-model="form.phone_number" type="tel" label="手机" />
-            <van-field label="职位">
+            <van-field v-model="form.job_title" label="职位" />
+            <!-- <van-field label="职位">
                 <template #input>
                     <van-radio-group v-model="form.job_title" direction="horizontal">
                         <van-radio name="店总">店总</van-radio>
@@ -32,7 +34,7 @@
                         <van-radio name="其他">其他</van-radio>
                     </van-radio-group>
                 </template>
-            </van-field>
+            </van-field>-->
 
             <van-button @click="franchise" type="warning" block>立即报名</van-button>
         </div>
