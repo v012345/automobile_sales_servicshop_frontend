@@ -19,6 +19,9 @@ const actions = {
         if (value == "undefined") return;
         context.commit("SET_INVITER", parseInt(value))
     },
+    setApi(context, value) {
+        context.commit("SET_API", value)
+    },
 }
 const mutations = {
     ADD(state, value) {
@@ -35,6 +38,9 @@ const mutations = {
     },
     SET_INVITER(state, value) {
         state.inviter = value
+    },
+    SET_API(state, value) {
+        state.api = value
     }
 }
 const state = {
@@ -43,6 +49,7 @@ const state = {
     config: {},
     activity: {},
     inviter: undefined,
+    api: "",
 }
 // 类似与计算属性
 const getters = {

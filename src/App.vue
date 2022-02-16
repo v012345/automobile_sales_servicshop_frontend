@@ -18,13 +18,42 @@ export default {
   computed: {
     ...mapState(['activity', 'user'])
   },
+  beforeDestroy() {
+
+  },
   created() {
+    // window.addEventListener("beforeunload", function () {
+    //   navigator.sendBeacon(this.$api + "analytics", {
+    //     user: this.user.id,
+    //     activity: this.activity.id,
+    //     duration: 10,
+    //   });
+    // })
+
+
+    // navigator.sendBeacon(this.$api + "analytics",
+    //  ;
+
+    // console.log(this.$dayjs());
+
     if (sessionStorage.getItem("store")) {
       this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
     }
+    localStorage.open_at = this.$dayjs().unix()
+
     window.addEventListener("beforeunload", () => {
       sessionStorage.setItem("store", JSON.stringify(this.$store.state))
+
+      let left_at = Math.floor(Date.now() / 1000)
+      let open_at = parseInt(localStorage.open_at)
+      let duration = left_at - open_at
+      navigator.sendBeacon(this.$store.state.api + "analytics",
+        new Blob([JSON.stringify({ user: this.$store.state.user.id, activity: this.$store.state.activity.id, duration })]));
     })
+
+
+    this.$store.dispatch("setApi", this.$api)
+
     this.axios.get(this.$api + "system/config").then((response) => {
       this.$store.dispatch("setConfig", response.data)
     });
