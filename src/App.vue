@@ -41,7 +41,16 @@ export default {
     }
     localStorage.open_at = this.$dayjs().unix()
 
-    window.addEventListener("beforeunload", () => {
+    // window.addEventListener("beforeunload", () => {
+    //   sessionStorage.setItem("store", JSON.stringify(this.$store.state))
+
+    //   let left_at = Math.floor(Date.now() / 1000)
+    //   let open_at = parseInt(localStorage.open_at)
+    //   let duration = left_at - open_at
+    //   navigator.sendBeacon(this.$store.state.api + "analytics",
+    //     new Blob([JSON.stringify({ user: this.$store.state.user.id, activity: this.$store.state.activity.id, duration })]));
+    // })
+    window.addEventListener("pagehide", () => {
       sessionStorage.setItem("store", JSON.stringify(this.$store.state))
 
       let left_at = Math.floor(Date.now() / 1000)
@@ -50,6 +59,7 @@ export default {
       navigator.sendBeacon(this.$store.state.api + "analytics",
         new Blob([JSON.stringify({ user: this.$store.state.user.id, activity: this.$store.state.activity.id, duration })]));
     })
+
 
 
     this.$store.dispatch("setApi", this.$api)
