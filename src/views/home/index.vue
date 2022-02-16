@@ -419,6 +419,13 @@ export default {
                         success: () => {
                         },
                     });
+                }).catch((error) => {
+                    if (error.response.status == 500) {
+                        Toast({ message: "请在微信内置浏览器中购买" })
+                    } else if (error.response.status == 400) {
+                        Toast({ message: "邀请好友购买后,您可以购买" })
+                    }
+
                 });
         },
 
