@@ -42,7 +42,7 @@ new Vue({
     Vue.prototype.$Echo = new Echo({
       broadcaster: 'pusher',
       key: "ShdHLAikrhOsNRg9",
-      wsHost: "api.nightowl.name",
+      wsHost: "4s.100pq.cn",
       wsPort: 6001,
       forceTLS: false
     });
