@@ -52,7 +52,6 @@ export default {
     // })
     window.addEventListener("pagehide", () => {
       sessionStorage.setItem("store", JSON.stringify(this.$store.state))
-
       let left_at = Math.floor(Date.now() / 1000)
       let open_at = parseInt(localStorage.open_at)
       let duration = left_at - open_at
@@ -126,6 +125,7 @@ export default {
         } else if (response.status == 200) {
           this.$store.dispatch("setUser", response.data)
           this.$emit("updateShareData");
+          this.$bus.$emit("activityReady");
           if (
             localStorage.activityId &&
             localStorage.activityId != "undefined"

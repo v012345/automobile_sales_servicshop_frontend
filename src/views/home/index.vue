@@ -491,6 +491,9 @@ export default {
         },
     },
     mounted() {
+        this.$bus.$on("activityReady", () => {
+            this.sign_up_form.licensePlateNumber = this.activity.prefix
+        });
         this.sign_up_form.licensePlateNumber = this.activity.prefix
         this.$Echo.channel(`4s`)
             .listen('Paid', (e) => {
