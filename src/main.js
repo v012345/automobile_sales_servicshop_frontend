@@ -22,16 +22,15 @@ Vue.use(Vant);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
-console.log(1123)
-console.log(process.env.VUE_APP_BACKEND)
-console.log(process.env.VUE_APP_API)
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this;
     Vue.prototype.$wx = wx;
     Vue.prototype.$dayjs = dayjs;
-    Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
-    Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
+    Vue.prototype.$api = process.env.VUE_APP_API;
+    Vue.prototype.$backend = process.env.VUE_APP_BACKEND;
+    // Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
+    // Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
 
     // Vue.prototype.$api = "http://192.168.31.84/api/";
     // Vue.prototype.$backend = "http://192.168.31.84";
