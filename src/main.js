@@ -22,6 +22,9 @@ Vue.use(Vant);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
+console.log(1123)
+console.log(process.env.VUE_APP_BACKEND)
+console.log(process.env.VUE_APP_API)
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this;
