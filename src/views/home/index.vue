@@ -393,7 +393,7 @@ export default {
 
             if (
                 !(
-                    this.sign_up_form.licensePlateNumber.length <= 2 &&
+                    this.sign_up_form.licensePlateNumber.length > 3 &&
                     this.sign_up_form.phoneNumber &&
                     this.sign_up_form.name &&
                     this.sign_up_form.carModel
