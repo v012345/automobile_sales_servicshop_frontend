@@ -131,9 +131,9 @@
 
                                     <div style="margin-right: 0.5rem">
                                         {{
-                                        normalCoupons.coupons[
-                                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                        ].participant.participant_info.name
+                                            normalCoupons.coupons[
+                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                            ].participant.participant_info.name
                                         }}
                                     </div>
                                     <div
@@ -143,12 +143,12 @@
                                         ].participant.license_plate_number"
                                     >
                                         {{
-                                        normalCoupons.coupons[
-                                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                        ].participant.license_plate_number.replace(
-                                        RegExp("^(..)(.*)(.)$"),
-                                        "$1**$3"
-                                        )
+                                            normalCoupons.coupons[
+                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                            ].participant.license_plate_number.replace(
+                                                RegExp("^(..)(.*)(.)$"),
+                                                "$1**$3"
+                                            )
                                         }}
                                         <!-- .replace(
                                                 /^(..)(.*)(.)$/,
@@ -157,16 +157,16 @@
                                     </div>
                                     <div style="margin-right: 0.5rem">
                                         {{
-                                        normalCoupons.coupons[
-                                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                        ].created_at
+                                            normalCoupons.coupons[
+                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                            ].created_at
                                         }}
                                     </div>
                                     <div>
                                         已支付{{
-                                        normalCoupons.coupons[
-                                        (i * 2 - (j % 2)) % normalCoupons.coupons.length
-                                        ].value
+                                            normalCoupons.coupons[
+                                                (i * 2 - (j % 2)) % normalCoupons.coupons.length
+                                            ].value
                                         }}元
                                     </div>
                                 </div>
@@ -393,7 +393,7 @@ export default {
 
             if (
                 !(
-                    this.sign_up_form.licensePlateNumber &&
+                    this.sign_up_form.licensePlateNumber.length <= 2 &&
                     this.sign_up_form.phoneNumber &&
                     this.sign_up_form.name &&
                     this.sign_up_form.carModel
