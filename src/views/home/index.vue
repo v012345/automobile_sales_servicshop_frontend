@@ -198,7 +198,7 @@
             <img @click="franchise" width="150px" height="45px" src="@/assets/apply_button.png" />
         </div>
 
-        <div class="footer">由{{ config.tech_surppot }}提供技术支持</div>
+        <div class="footer">{{ config.tech_surppot }}提供技术支持</div>
 
         <div class="share-button" @click="generatePoster">
             <van-icon size="40" color="#b8b8b8" name="share-o" />
