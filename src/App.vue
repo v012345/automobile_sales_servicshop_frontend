@@ -127,7 +127,7 @@ export default {
               }
             })
             .then((response) => {
-              // window.location.href = response.data;
+              window.location.href = response.data;
             });
         } else if (response.status == 200) {
           this.$store.dispatch("setUser", response.data)
