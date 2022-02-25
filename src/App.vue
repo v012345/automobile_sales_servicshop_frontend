@@ -94,9 +94,7 @@ export default {
     //   this.inviter = localStorage.inviter;
     // }
 
-    if (!localStorage.temporaryId) {
-      localStorage.temporaryId = this.$uuid.v1();
-    }
+
 
     this.axios
       .get(this.$api + "activity/" + localStorage.activityId)
@@ -111,16 +109,25 @@ export default {
         this.$emit("updateShareData");
         localStorage.activityId = response.data.id;
       });
+
+    if (!localStorage.temporaryId) {
+      localStorage.temporaryId = this.$uuid.v1();
+    }
     this.axios
       .post(this.$api + "login", {
         temporaryId: localStorage.temporaryId,
+
       })
       .then((response) => {
         if (response.status == 204) {
           this.axios
-            .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
+            .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId, {
+              params: {
+                appUrl: window.location.href,
+              }
+            })
             .then((response) => {
-              window.location.href = response.data;
+              // window.location.href = response.data;
             });
         } else if (response.status == 200) {
           this.$store.dispatch("setUser", response.data)
