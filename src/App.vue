@@ -123,7 +123,7 @@ export default {
           this.axios
             .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId, {
               params: {
-                appUrl: window.location.href,
+                appUrl: window.location.href + "proxy/",
               }
             })
             .then((response) => {
