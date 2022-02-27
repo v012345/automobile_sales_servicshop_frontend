@@ -152,7 +152,7 @@ export default {
           link:
             window.location.origin +
             `/activity/${this.activity.id}/inviter/${this.user.id}`,
-          imgUrl: this.$backend + this.activity.poster,
+          imgUrl: this.$oss + this.activity.poster,
         };
         // this.$wx.updateAppMessageShareData(config);
         this.$wx.updateTimelineShareData(config);

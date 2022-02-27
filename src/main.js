@@ -29,13 +29,8 @@ new Vue({
     Vue.prototype.$dayjs = dayjs;
     Vue.prototype.$api = process.env.VUE_APP_API;
     Vue.prototype.$backend = process.env.VUE_APP_BACKEND;
-    // Vue.prototype.$api = "http://amap.100pq.cn/laravel/api/";
-    // Vue.prototype.$backend = "http://amap.100pq.cn/laravel";
+    Vue.prototype.$oss = process.env.VUE_APP_OSS;
 
-    // Vue.prototype.$api = "http://192.168.31.84/api/";
-    // Vue.prototype.$backend = "http://192.168.31.84";
-
-    // Vue.prototype.$domain = "http://amap.100pq.cn/";
     // Vue.prototype.$qrcode = require('jr-qrcode');
 
     Vue.prototype.$qrcode = jrQrcode;

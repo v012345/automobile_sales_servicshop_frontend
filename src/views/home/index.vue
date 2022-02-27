@@ -10,12 +10,12 @@
                 x5-playsinline
                 playsinline
                 webkit-playsinline="true"
-                :poster="$backend + activity.video_thumbnail"
+                :poster="$oss + activity.video_thumbnail"
             >
-                <source :src="$backend + activity.video" type="video/mp4" />
+                <source :src="$oss + activity.video" type="video/mp4" />
             </video>
 
-            <van-image width="100vw" fit="cover" :src="$backend + activity.poster" />
+            <van-image width="100vw" fit="cover" :src="$oss + activity.poster" />
         </template>
 
         <van-form>
@@ -191,7 +191,7 @@
             <van-image
                 v-for="(image, i) in activity.propaganda_images"
                 :key="i"
-                :src="$backend + image"
+                :src="$oss + image"
             />
         </template>
         <div style="display:flex;justify-content:center">

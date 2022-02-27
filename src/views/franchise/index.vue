@@ -1,7 +1,7 @@
 <template>
     <div style="width:100vw;overflow:hidden">
         <div>
-            <van-image width="100vw" :src="$backend + config.franchise_banner" />
+            <van-image width="100vw" :src="$oss + config.franchise_banner" />
         </div>
         <div>
             <van-field
