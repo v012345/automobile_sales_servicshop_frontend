@@ -414,6 +414,7 @@ export default {
                     open_id: this.user.open_id,
                     activityId: this.activity.id,
                     inviter: this.inviter,
+                    notify_url: `${window.location.origin}/proxy/api/pay/wechat/notification`,
                     ...this.sign_up_form,
                 })
                 .then((response) => {
