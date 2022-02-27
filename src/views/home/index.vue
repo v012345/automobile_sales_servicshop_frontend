@@ -485,11 +485,12 @@ export default {
                 });
 
                 this.axios
-                    .get(
+                    .post(
                         this.$api +
-                        `activity/${this.activity.id}/participant/${this.user.id}/poster/`
-                    )
-                    .then((response) => {
+                        `activity/${this.activity.id}/participant/${this.user.id}/poster/`, {
+                        originUrl: window.location.href,
+                        posterUrl: this.$oss + this.activity.poster
+                    }).then((response) => {
                         Toast.clear();
                         this.poster.src = response.data;
                         this.poster.show = true;
