@@ -28,7 +28,6 @@ new Vue({
     Vue.prototype.$wx = wx;
     Vue.prototype.$dayjs = dayjs;
     Vue.prototype.$api = process.env.VUE_APP_API;
-    Vue.prototype.$backend = process.env.VUE_APP_BACKEND;
     Vue.prototype.$oss = process.env.VUE_APP_OSS;
 
     // Vue.prototype.$qrcode = require('jr-qrcode');
