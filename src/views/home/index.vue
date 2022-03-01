@@ -146,7 +146,7 @@
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                                             ].participant.license_plate_number.replace(
-                                                RegExp("^(..)(.*)(.)$"),
+                                                RegExp("^(...)(.*)(..)$"),
                                                 "$1**$3"
                                             )
                                         }}
