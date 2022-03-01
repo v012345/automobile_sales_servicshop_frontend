@@ -129,7 +129,7 @@
                                         />
                                     </div>
 
-                                    <div class="name" style="margin-right: 0.5rem;">
+                                    <div style="margin-right: 0.5rem;">
                                         {{
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
@@ -396,7 +396,7 @@ export default {
             if (
                 !(
                     this.sign_up_form.licensePlateNumber &&
-                    this.sign_up_form.licensePlateNumber.length > 3 &&
+                    this.sign_up_form.licensePlateNumber.length > 5 &&
                     this.sign_up_form.phoneNumber &&
                     this.sign_up_form.name &&
                     this.sign_up_form.carModel
@@ -562,10 +562,6 @@ export default {
         display: flex;
         justify-content: center;
         width: 9.09vw;
-    }
-    .name {
-        max-width: 5rem;
-        overflow: hidden;
     }
 }
 .coupon-buttons {
