@@ -129,7 +129,7 @@
                                         />
                                     </div>
 
-                                    <div style="margin-right: 0.5rem">
+                                    <div class="name" style="margin-right: 0.5rem;">
                                         {{
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
@@ -562,6 +562,10 @@ export default {
         display: flex;
         justify-content: center;
         width: 9.09vw;
+    }
+    .name {
+        max-width: 5rem;
+        overflow: hidden;
     }
 }
 .coupon-buttons {
