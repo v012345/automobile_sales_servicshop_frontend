@@ -117,6 +117,9 @@
                                 <div class="row" v-for="j in 2" :key="j">
                                     <div class="avatar">
                                         <van-image
+                                            @click="console.log(normalCoupons.coupons[
+                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                            ].participant)"
                                             height="25px"
                                             width="25px"
                                             fit="cover"
