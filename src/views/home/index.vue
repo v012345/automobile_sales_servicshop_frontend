@@ -566,6 +566,7 @@ export default {
         display: flex;
         justify-content: center;
         width: 9.09vw;
+        height: 9.09vw;
     }
 }
 .coupon-buttons {
