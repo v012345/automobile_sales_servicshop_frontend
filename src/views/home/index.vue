@@ -360,6 +360,7 @@ export default {
                 let coupons = this.activity.coupons.filter(
                     (coupon) => coupon.type == "normal"
                 );
+                coupons.reverse();
                 return {
                     total: coupons.length,
                     coupons: coupons.slice(0, 50),
