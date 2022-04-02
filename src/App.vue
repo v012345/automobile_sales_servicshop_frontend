@@ -118,7 +118,12 @@ export default {
       .then((response) => {
         if (response.status == 204) {
           this.axios
-            .get(this.$api + "wechat/redirect_uri/" + localStorage.temporaryId)
+            .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
+              params: {
+                hostname: window.location.hostname,
+                redirect_to: window.location.href
+              }
+            })
             .then((response) => {
               window.location.href = response.data;
             });
