@@ -116,11 +116,13 @@ export default {
         temporaryId: localStorage.temporaryId,
       })
       .then((response) => {
+        console.log(localStorage.temporaryId);
+        console.log(response);
         if (response.status == 204) {
           this.axios
             .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
               params: {
-                hostname: window.location.hostname,
+                hostname: window.location.origin,
                 redirect_to: window.location.href
               }
             })
