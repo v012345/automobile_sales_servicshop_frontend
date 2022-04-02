@@ -111,39 +111,45 @@ export default {
         this.$emit("updateShareData");
         localStorage.activityId = response.data.id;
       });
+
+
+
+
+
     this.axios
-      .post(this.$api + "login", {
+      .post(this.$api + "v3/login", {
         temporaryId: localStorage.temporaryId,
       })
       .then((response) => {
-        console.log(localStorage.temporaryId);
-        console.log(response);
-        if (response.status == 204) {
-          this.axios
-            .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
-              params: {
-                hostname: window.location.origin,
-                redirect_to: window.location.href
-              }
-            })
-            .then((response) => {
-              window.location.href = response.data;
-            });
-        } else if (response.status == 200) {
-          this.$store.dispatch("setUser", response.data)
-          this.$emit("updateShareData");
-          this.$bus.$emit("activityReady");
-          if (
-            localStorage.activityId &&
-            localStorage.activityId != "undefined"
-          ) {
-            this.axios.post(this.$api + "activity/participate", {
-              userId: this.user.id,
-              activityId: localStorage.activityId,
-            });
-          }
+        this.$store.dispatch("setUser", response.data)
+        this.$emit("updateShareData");
+        this.$bus.$emit("activityReady");
+        if (
+          localStorage.activityId &&
+          localStorage.activityId != "undefined"
+        ) {
+          this.axios.post(this.$api + "activity/participate", {
+            userId: this.user.id,
+            activityId: localStorage.activityId,
+          });
         }
+      }).catch(() => {
+        this.axios
+          .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
+            params: {
+              hostname: window.location.origin,
+              redirect_to: window.location.href
+            }
+          })
+          .then((response) => {
+            window.location.href = response.data;
+          });
       });
+
+
+
+
+
     this.$on("updateShareData", () => {
       if (this.user.id && this.activity.id) {
         let config = {
