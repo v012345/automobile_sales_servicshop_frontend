@@ -57,6 +57,14 @@
                 type="number"
             />
             <van-field required v-model.trim="sign_up_form.name" label="姓名" placeholder="姓名" />
+            <van-field
+                v-model="fieldValue"
+                is-link
+                readonly
+                label="Area"
+                placeholder="Select Area"
+                @click="show = true"
+            />
             <van-field required v-model.trim="sign_up_form.carModel" label="车型" placeholder="车型" />
         </van-form>
         <div class="count-down">
@@ -280,6 +288,17 @@
                 </div>
             </van-popup>
         </div>
+        <div>
+            <van-popup v-model="show" round position="bottom">
+                <van-cascader
+                    v-model="cascaderValue"
+                    title="Select Area"
+                    :options="options"
+                    @close="show = false"
+                    @finish="onFinish"
+                />
+            </van-popup>
+        </div>
     </div>
 </template>
 
@@ -294,6 +313,32 @@ export default {
     name: "Home",
     data() {
         return {
+
+            show: false,
+            fieldValue: '',
+            cascaderValue: '',
+            options: [
+                {
+                    text: 'Zhejiang1',
+                    value: '3300001',
+                    children: [
+                        { text: 'Hangzhou2', value: '3301002', children: [{ text: 'Hangzhou3', value: '3301003' }] },
+                        { text: 'Hangzhou4', value: '3301004', children: [{ text: 'Hangzhou5', value: '3301005' }] }
+                    ],
+                },
+                {
+                    text: 'Jiangsu6',
+                    value: '3200006',
+                    children: [{ text: 'Nanjing6', value: '3201006' }],
+                },
+                {
+                    text: 'Jiangsu7',
+                    value: '3200007',
+
+                },
+            ],
+
+
 
             showIntroduction: false,
             isPaying: false,
@@ -374,6 +419,10 @@ export default {
     },
     methods: {
         log(n) { console.log(n) },
+        onFinish({ selectedOptions }) {
+            this.show = false;
+            this.fieldValue = selectedOptions.map((option) => option.text).join('/');
+        },
         toCouponsView() {
             this.$router.push('/coupons')
         },
@@ -505,10 +554,25 @@ export default {
             }
         },
     },
-    mounted() {
+    async mounted() {
+        console.log("home index activityId", localStorage.activityId);
+
+        try {
+            let response = await this.axios.post(this.$api + "v3/activity/configration", {
+                id: localStorage.activityId,
+            })
+            this.options = response.data.brand_category
+            console.log("activity config", response.data);
+
+        } catch (err) {
+            console.error("no activity config")
+        }
+
+
         this.$bus.$on("activityReady", () => {
             this.sign_up_form.licensePlateNumber = this.activity.prefix
         });
+        console.log(this.activity.prefix);
         this.sign_up_form.licensePlateNumber = this.activity.prefix
         this.$Echo.channel(`4s`)
             .listen('Paid', (e) => {

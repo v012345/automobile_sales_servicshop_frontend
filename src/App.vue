@@ -24,7 +24,7 @@ export default {
   async created() {
     // restore context
     if (sessionStorage.getItem("store")) {
-      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
+      // this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
     }
 
     // report user browse duration
@@ -76,7 +76,7 @@ export default {
         response.data.state = "inProgress";
       }
       this.$store.dispatch("setActivity", response.data);
-      this.$emit("updateShareData");
+      // this.$emit("updateShareData");
       localStorage.activityId = response.data.id;
     } catch (err) {
       if (err.response) {
@@ -87,6 +87,16 @@ export default {
         }
       }
     }
+    try {
+      let response = await this.axios.post(this.$api + "v3/activity/configration", {
+        id: localStorage.activityId,
+      })
+
+      console.log("activity config", response.data);
+
+    } catch (err) {
+      console.error("no activity config")
+    }
 
     // login
     try {
@@ -95,14 +105,15 @@ export default {
       })
       console.log("user login", response.data);
       this.$store.dispatch("setUser", response.data)
-      this.$emit("updateShareData");
-      this.$bus.$emit("activityReady");
+      // this.$emit("updateShareData");
+      // this.$bus.$emit("activityReady");
       this.axios.post(this.$api + "activity/participate", {
         userId: this.user.id,
         activityId: localStorage.activityId,
       });
 
     } catch (err) {
+      return
       if (err.response) {
         let status = err.response.status;
         if (status == 404) {
@@ -134,7 +145,7 @@ export default {
       this.$wx.config({
         ...response.data,
       });
-      this.$emit("updateShareData");
+      // this.$emit("updateShareData");
     } catch (err) {
       console.error("jssdk config failed")
     }
