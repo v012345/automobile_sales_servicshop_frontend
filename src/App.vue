@@ -116,11 +116,14 @@ export default {
 
 
 
+    // login
     this.axios
       .post(this.$api + "v3/login", {
         temporaryId: localStorage.temporaryId,
       })
       .then((response) => {
+        console.log(123);
+        console.log(response);
         this.$store.dispatch("setUser", response.data)
         this.$emit("updateShareData");
         this.$bus.$emit("activityReady");
@@ -133,17 +136,34 @@ export default {
             activityId: localStorage.activityId,
           });
         }
-      }).catch(() => {
-        this.axios
-          .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
-            params: {
-              hostname: window.location.origin,
-              redirect_to: window.location.href
-            }
-          })
-          .then((response) => {
-            window.location.href = response.data;
-          });
+      }).catch((err) => {
+        if (err.response) {
+          let status = err.response.status;
+          if (status == 404) {
+            this.axios
+              .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
+                params: {
+                  hostname: window.location.origin,
+                  redirect_to: window.location.href
+                }
+              })
+              .then((response) => {
+                window.location.href = response.data;
+              });
+          }
+          if (status == 400) {
+            console.error("missing temporary id")
+          }
+
+          // console.log(err.response.status); // 👉️ 404
+          // console.log(err.response.statusText); // 👉️ Not Found
+          // console.log(err.message); // 👉️ Request failed with status code 404
+          // console.log(err.response.headers); // 👉️ {... response headers here}
+          // console.log(err.response.data); // 
+
+        }
+
+
       });
 
 
