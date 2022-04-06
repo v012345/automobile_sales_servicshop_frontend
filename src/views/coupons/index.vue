@@ -43,7 +43,7 @@
                                 :available="false"
                             ></Coupon>
                         </template>
-                        <template>
+                        <template v-else>
                             <Coupon
                                 :value="activityConfig.shared_coupon_value"
                                 :allow_to_use_at="activity.allow_to_use_at"

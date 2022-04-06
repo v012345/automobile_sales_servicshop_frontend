@@ -225,7 +225,8 @@
         <div class="footer">{{ config.tech_surppot }}提供技术支持</div>
 
         <div class="share-button" @click="generatePoster">
-            <van-icon size="40" color="#b8b8b8" name="share-o" />
+            <!-- <van-icon size="40" color="#b8b8b8" name="share-o" /> -->
+            <img width="50px" height="50px" src="@/assets/share_button.png" />
         </div>
 
         <div class="bottom-buttons">
@@ -664,12 +665,12 @@ export default {
     }
 }
 .share-button {
-    border: 3px solid #b8b8b8;
+    // border: 3px solid #b8b8b8;
     position: fixed;
     bottom: 100px;
     border-radius: 50%;
     right: 10px;
-    background-color: rgba(0, 0, 0, 0.397);
+    // background-color: rgba(0, 0, 0, 0.397);
 }
 .footer {
     height: 140px;
