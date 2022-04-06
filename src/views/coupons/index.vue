@@ -9,10 +9,10 @@
                         :key="coupon.id"
                     >
                         <Coupon
-                            :value="coupon.value"
+                            :value="activityConfig.normal_coupon_value"
                             :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at"
-                            :description="activity.description"
+                            :description="activityConfig.normal_coupon_description"
                             :available="coupon.state == 'available'"
                         ></Coupon>
                     </div>
@@ -24,23 +24,34 @@
                         :key="coupon.id"
                     >
                         <Coupon
-                            :value="coupon.value"
+                            :value="activityConfig.shared_coupon_value"
                             :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at"
-                            :description="activity.description"
+                            :description="activityConfig.shared_coupon_description"
                             :available="coupon.state == 'available'"
                         ></Coupon>
                     </div>
                 </van-tab>
                 <van-tab title="失效的" name="expired">
                     <div v-for="coupon in expiredCoupons" :key="coupon.id">
-                        <Coupon
-                            :value="coupon.value"
-                            :allow_to_use_at="activity.allow_to_use_at"
-                            :expire_at="activity.expire_at"
-                            :description="activity.description"
-                            :available="false"
-                        ></Coupon>
+                        <template v-if="coupon.type == 'normal'">
+                            <Coupon
+                                :value="activityConfig.normal_coupon_value"
+                                :allow_to_use_at="activity.allow_to_use_at"
+                                :expire_at="activity.expire_at"
+                                :description="activityConfig.normal_coupon_description"
+                                :available="false"
+                            ></Coupon>
+                        </template>
+                        <template>
+                            <Coupon
+                                :value="activityConfig.shared_coupon_value"
+                                :allow_to_use_at="activity.allow_to_use_at"
+                                :expire_at="activity.expire_at"
+                                :description="activityConfig.shared_coupon_description"
+                                :available="false"
+                            ></Coupon>
+                        </template>
                     </div>
                 </van-tab>
             </van-tabs>

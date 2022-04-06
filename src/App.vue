@@ -82,6 +82,12 @@ export default {
         this.$store.dispatch("setActivity", activity);
         localStorage.activityId = activity.id;
       }
+
+      if (response.data.activity_config) {
+        let activity_config = response.data.activity_config
+        this.$store.dispatch("setActivityConfig", activity_config);
+      }
+
       if (response.data.user) {
         let user = response.data.user
         this.$store.dispatch("setUser", user)
@@ -106,73 +112,6 @@ export default {
         });
     }
 
-    // fetch the activity
-    // try {
-    //   let response = await this.axios.get(this.$api + "activity/" + localStorage.activityId)
-    //   console.log("fetched the activity", response.data);
-    //   document.title = response.data.title;
-    //   if (!this.$dayjs().isBefore(response.data.end_at)) {
-    //     response.data.state = "ended";
-    //   } else {
-    //     response.data.state = "inProgress";
-    //   }
-    //   this.$store.dispatch("setActivity", response.data);
-    //   localStorage.activityId = response.data.id;
-    // } catch (err) {
-    //   if (err.response) {
-    //     let status = err.response.status;
-    //     if (status == 404) {
-    //       console.log("no activity");
-    //       document.title = "目前还没有活动,请耐心等待"
-    //     }
-    //   }
-    // }
-
-    //fetch activity config
-    try {
-      let response = await this.axios.post(this.$api + "v3/activity/configration", {
-        activityId: localStorage.activityId,
-      })
-      this.$store.dispatch("setActivityConfig", response.data);
-      console.log("activity config", response.data);
-      localStorage.activityId = response.data.activity_id;
-    } catch (err) {
-      console.log("no activity config")
-    }
-
-
-    // login
-    // try {
-    //   let response = await this.axios.post(this.$api + "v3/login", {
-    //     temporaryId: localStorage.temporaryId,
-    //   })
-    //   console.log("user login", response.data);
-    //   this.$store.dispatch("setUser", response.data)
-    //   this.axios.post(this.$api + "activity/participate", {
-    //     userId: this.user.id,
-    //     activityId: localStorage.activityId,
-    //   });
-
-    // } catch (err) {
-    //   if (err.response) {
-    //     let status = err.response.status;
-    //     if (status == 404) {
-    //       this.axios
-    //         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
-    //           params: {
-    //             hostname: window.location.origin,
-    //             redirect_to: window.location.href
-    //           }
-    //         })
-    //         .then((response) => {
-    //           window.location.href = response.data;
-    //         });
-    //     }
-    //     if (status == 400) {
-    //       console.error("missing temporary id")
-    //     }
-    //   }
-    // }
 
     // config jssdk
     try {
