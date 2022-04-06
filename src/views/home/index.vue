@@ -281,12 +281,16 @@
                         </div>
                     </van-tab>
                     <van-tab title="我的奖品">
-                        <div v-for="coupon in availableCoupons" :key="coupon.id">
+                        <div
+                            v-for="coupon in availableCoupons"
+                            :key="coupon.id"
+                            @click="toCouponsView"
+                        >
                             <Coupon
-                                :value="coupon.value"
+                                :value="activityConfig.normal_coupon_value"
                                 :allow_to_use_at="activity.allow_to_use_at"
                                 :expire_at="activity.expire_at"
-                                :description="activity.description"
+                                :description="activityConfig.normal_coupon_description"
                                 :available="true"
                             ></Coupon>
                         </div>
@@ -306,7 +310,7 @@
             <van-popup v-model="showCarModelPicker" round position="bottom">
                 <van-cascader
                     v-model="cascaderValue"
-                    title="Select Area"
+                    title="选择车型"
                     :options="activityConfig.brand_category"
                     @close="showCarModelPicker = false"
                     @finish="onFinish"
