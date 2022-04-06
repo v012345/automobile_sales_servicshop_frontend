@@ -65,27 +65,68 @@ export default {
       localStorage.activityId = result[result.length - 1]
     }
 
-    // fetch the activity
     try {
-      let response = await this.axios.get(this.$api + "activity/" + localStorage.activityId)
-      console.log("fetched the activity", response.data);
-      document.title = response.data.title;
-      if (!this.$dayjs().isBefore(response.data.end_at)) {
-        response.data.state = "ended";
-      } else {
-        response.data.state = "inProgress";
-      }
-      this.$store.dispatch("setActivity", response.data);
-      localStorage.activityId = response.data.id;
-    } catch (err) {
-      if (err.response) {
-        let status = err.response.status;
-        if (status == 404) {
-          console.log("no activity");
-          document.title = "目前还没有活动,请耐心等待"
+      let response = await this.axios.post(this.$api + "v3/init", {
+        activityId: localStorage.activityId,
+        temporaryId: localStorage.temporaryId
+      })
+      console.log(response.data)
+      if (response.data.activity) {
+        let activity = response.data.activity
+        document.title = activity.title;
+        if (!this.$dayjs().isBefore(activity.end_at)) {
+          activity.state = "ended";
+        } else {
+          activity.state = "inProgress";
         }
+        this.$store.dispatch("setActivity", activity);
+        localStorage.activityId = activity.id;
       }
+      if (response.data.user) {
+        let user = response.data.user
+        this.$store.dispatch("setUser", user)
+        this.axios.post(this.$api + "activity/participate", {
+          userId: user.id,
+          activityId: localStorage.activityId,
+        });
+      } else {
+        throw new Error()
+      }
+
+    } catch (err) {
+      this.axios
+        .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
+          params: {
+            hostname: window.location.origin,
+            redirect_to: window.location.href
+          }
+        })
+        .then((response) => {
+          window.location.href = response.data;
+        });
     }
+
+    // fetch the activity
+    // try {
+    //   let response = await this.axios.get(this.$api + "activity/" + localStorage.activityId)
+    //   console.log("fetched the activity", response.data);
+    //   document.title = response.data.title;
+    //   if (!this.$dayjs().isBefore(response.data.end_at)) {
+    //     response.data.state = "ended";
+    //   } else {
+    //     response.data.state = "inProgress";
+    //   }
+    //   this.$store.dispatch("setActivity", response.data);
+    //   localStorage.activityId = response.data.id;
+    // } catch (err) {
+    //   if (err.response) {
+    //     let status = err.response.status;
+    //     if (status == 404) {
+    //       console.log("no activity");
+    //       document.title = "目前还没有活动,请耐心等待"
+    //     }
+    //   }
+    // }
 
     //fetch activity config
     try {
@@ -101,37 +142,37 @@ export default {
 
 
     // login
-    try {
-      let response = await this.axios.post(this.$api + "v3/login", {
-        temporaryId: localStorage.temporaryId,
-      })
-      console.log("user login", response.data);
-      this.$store.dispatch("setUser", response.data)
-      this.axios.post(this.$api + "activity/participate", {
-        userId: this.user.id,
-        activityId: localStorage.activityId,
-      });
+    // try {
+    //   let response = await this.axios.post(this.$api + "v3/login", {
+    //     temporaryId: localStorage.temporaryId,
+    //   })
+    //   console.log("user login", response.data);
+    //   this.$store.dispatch("setUser", response.data)
+    //   this.axios.post(this.$api + "activity/participate", {
+    //     userId: this.user.id,
+    //     activityId: localStorage.activityId,
+    //   });
 
-    } catch (err) {
-      if (err.response) {
-        let status = err.response.status;
-        if (status == 404) {
-          this.axios
-            .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
-              params: {
-                hostname: window.location.origin,
-                redirect_to: window.location.href
-              }
-            })
-            .then((response) => {
-              window.location.href = response.data;
-            });
-        }
-        if (status == 400) {
-          console.error("missing temporary id")
-        }
-      }
-    }
+    // } catch (err) {
+    //   if (err.response) {
+    //     let status = err.response.status;
+    //     if (status == 404) {
+    //       this.axios
+    //         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
+    //           params: {
+    //             hostname: window.location.origin,
+    //             redirect_to: window.location.href
+    //           }
+    //         })
+    //         .then((response) => {
+    //           window.location.href = response.data;
+    //         });
+    //     }
+    //     if (status == 400) {
+    //       console.error("missing temporary id")
+    //     }
+    //   }
+    // }
 
     // config jssdk
     try {

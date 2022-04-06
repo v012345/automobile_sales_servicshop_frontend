@@ -457,10 +457,8 @@ export default {
                 Toast({ message: "正在购买,请稍等" });
                 return;
             }
+
             this.isPaying = true;
-
-
-
             this.axios.post(this.$api + "pay", {
                 amount: this.activity.signing_up_fee,
                 payer: this.user.id,

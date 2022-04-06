@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="user.id && activity.id" class="card-container">
+        <div v-if="user.id && activity.id && activityConfig.activity_id" class="card-container">
             <van-tabs type="card">
                 <van-tab title="可用的" name="available">
                     <div
@@ -69,7 +69,7 @@ export default {
         Coupon,
     },
     computed: {
-        ...mapState(['activity', 'user', "config"]),
+        ...mapState(['activity', 'user', "config", 'activityConfig']),
         availableCoupons() {
             if (this.user.id && this.activity.id) {
                 return this.user.coupons.filter(
