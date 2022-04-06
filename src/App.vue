@@ -76,7 +76,6 @@ export default {
         response.data.state = "inProgress";
       }
       this.$store.dispatch("setActivity", response.data);
-      // this.$emit("updateShareData");
       localStorage.activityId = response.data.id;
     } catch (err) {
       if (err.response) {
@@ -87,16 +86,18 @@ export default {
         }
       }
     }
+
     try {
       let response = await this.axios.post(this.$api + "v3/activity/configration", {
-        id: localStorage.activityId,
+        activityId: localStorage.activityId,
       })
-
+      this.$store.dispatch("setActivityConfig", response.data);
       console.log("activity config", response.data);
-
+      localStorage.activityId = response.data.activity_id;
     } catch (err) {
-      console.error("no activity config")
+      console.log("no activity config")
     }
+
 
     // login
     try {
@@ -105,15 +106,12 @@ export default {
       })
       console.log("user login", response.data);
       this.$store.dispatch("setUser", response.data)
-      // this.$emit("updateShareData");
-      // this.$bus.$emit("activityReady");
       this.axios.post(this.$api + "activity/participate", {
         userId: this.user.id,
         activityId: localStorage.activityId,
       });
 
     } catch (err) {
-      return
       if (err.response) {
         let status = err.response.status;
         if (status == 404) {
@@ -145,7 +143,6 @@ export default {
       this.$wx.config({
         ...response.data,
       });
-      // this.$emit("updateShareData");
     } catch (err) {
       console.error("jssdk config failed")
     }
@@ -161,7 +158,6 @@ export default {
     // this.$wx.updateAppMessageShareData(config);
     this.$wx.updateTimelineShareData(config);
     this.$wx.onMenuShareAppMessage(config);
-
   },
 }
 </script>

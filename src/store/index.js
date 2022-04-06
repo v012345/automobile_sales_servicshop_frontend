@@ -12,6 +12,9 @@ const actions = {
     setActivity(context, value) {
         context.commit("SET_ACTIVITY", value)
     },
+    setActivityConfig(context, value) {
+        context.commit("SET_ACTIVITY_CONFIG", value)
+    },
     setUser(context, value) {
         context.commit("SET_USER", value)
     },
@@ -33,6 +36,9 @@ const mutations = {
     SET_ACTIVITY(state, value) {
         state.activity = value
     },
+    SET_ACTIVITY_CONFIG(state, value) {
+        state.activityConfig = value
+    },
     SET_USER(state, value) {
         state.user = value
     },
@@ -48,6 +54,7 @@ const state = {
     user: {},
     config: {},
     activity: {},
+    activityConfig: {},
     inviter: undefined,
     api: "",
 }
