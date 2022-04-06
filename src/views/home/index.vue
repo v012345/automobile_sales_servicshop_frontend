@@ -461,7 +461,7 @@ export default {
 
 
 
-            this.axios.post(this.$api + "v3/pay", {
+            this.axios.post(this.$api + "pay", {
                 amount: this.activity.signing_up_fee,
                 payer: this.user.id,
                 open_id: this.user.open_id,
