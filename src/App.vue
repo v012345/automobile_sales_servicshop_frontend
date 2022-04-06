@@ -87,6 +87,7 @@ export default {
       }
     }
 
+    //fetch activity config
     try {
       let response = await this.axios.post(this.$api + "v3/activity/configration", {
         activityId: localStorage.activityId,

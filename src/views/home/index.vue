@@ -239,7 +239,7 @@
             </template>
             <template v-else>
                 <template v-if="!haveACoupon">
-                    <div class="sign-up-button" @click="buyCoupon">
+                    <div class="sign-up-button" @click="buy">
                         <p>马上参与({{ activity.signing_up_fee }}元)</p>
                     </div>
                 </template>
@@ -427,59 +427,66 @@ export default {
         call(n) {
             window.location.href = "tel://" + n;
         },
-        buyCoupon() {
-            if (!(this.user && this.user.id && this.activity && this.activity.id)) {
-                Toast({ message: "请登记完整信息" });
+        buy() {
+
+
+
+            if (!(this.user.id && this.activity.id && this.activityConfig.activity_id)) {
+                Toast({ message: "正加在载个人信息,请稍等" });
                 this.$refs.sign_up_form.scrollIntoView({ behavior: "smooth" });
                 return;
             }
 
 
 
-            if (
-                !(
-                    this.sign_up_form.licensePlateNumber &&
-                    this.sign_up_form.licensePlateNumber.length > 5 &&
-                    this.sign_up_form.phoneNumber &&
-                    this.sign_up_form.name &&
-                    this.sign_up_form.carModel
-                )
-            ) {
+            if (!(this.sign_up_form.phoneNumber && this.sign_up_form.name && this.sign_up_form.carModel)) {
                 Toast({ message: "请登记完整信息" });
                 this.$refs.sign_up_form.scrollIntoView({ behavior: "smooth" });
                 return;
             }
+
+            if (this.activityConfig.show_license_plate_number_field) {
+                if (this.sign_up_form.licensePlateNumber.length < 5) {
+                    Toast({ message: "请登记完整信息" });
+                    this.$refs.sign_up_form.scrollIntoView({ behavior: "smooth" });
+                    return;
+                }
+            }
+
             if (this.isPaying) {
+                Toast({ message: "正在购买,请稍等" });
                 return;
             }
             this.isPaying = true;
-            this.axios
-                .post(this.$api + "pay", {
-                    amount: this.activity.signing_up_fee,
-                    payer: this.user.id,
-                    open_id: this.user.open_id,
-                    activityId: this.activity.id,
-                    inviter: this.inviter,
-                    ...this.sign_up_form,
-                })
-                .then((response) => {
-                    this.isPaying = false;
-                    console.log(response.data);
-                    this.$wx.chooseWXPay({
-                        ...response.data,
-                        timestamp: response.data.timeStamp,
-                        success: () => {
-                        },
-                    });
-                }).catch((error) => {
-                    this.isPaying = false;
-                    if (error.response.status == 500) {
-                        Toast({ message: "请在微信内置浏览器中购买" })
-                    } else if (error.response.status == 400) {
-                        Toast({ message: "邀请好友购买后,您可以购买" })
-                    }
 
+
+
+            this.axios.post(this.$api + "v3/pay", {
+                amount: this.activity.signing_up_fee,
+                payer: this.user.id,
+                open_id: this.user.open_id,
+                activityId: this.activity.id,
+                inviter: this.inviter,
+                hostname: window.location.origin,
+                ...this.sign_up_form,
+            }).then((response) => {
+                this.isPaying = false;
+                console.log(response.data);
+                this.$wx.chooseWXPay({
+                    ...response.data,
+                    timestamp: response.data.timeStamp,
+                    success: () => {
+                    },
                 });
+            }).catch((error) => {
+                this.isPaying = false;
+                if (error.response.status == 500) {
+                    Toast({ message: "请在微信内置浏览器中购买" })
+                } else if (error.response.status == 400) {
+                    Toast({ message: "邀请好友购买后,您可以购买" })
+                }
+
+            });
         },
 
         activityEnds() {
