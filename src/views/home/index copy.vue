@@ -152,7 +152,7 @@
                                         />
                                     </div>
 
-                                    <div class="name" style="margin-right: 0.5rem;">
+                                    <div style="margin-right: 0.5rem;">
                                         {{
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
@@ -160,9 +160,8 @@
                                         }}
                                     </div>
                                     <div
-                                        class="license_plate_number"
                                         style="margin-right: 0.5rem"
-                                        v-if="activityConfig.show_license_plate_number_field && normalCoupons.coupons[
+                                        v-if="normalCoupons.coupons[
                                             (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                                         ].participant.license_plate_number"
                                     >
@@ -174,6 +173,10 @@
                                                 "$1**$3"
                                             )
                                         }}
+                                        <!-- .replace(
+                                                /^(..)(.*)(.)$/,
+                                                "$1**$3"
+                                        )-->
                                     </div>
                                     <div style="margin-right: 0.5rem">
                                         {{
@@ -183,7 +186,7 @@
                                         }}
                                     </div>
                                     <div>
-                                        支付{{
+                                        已支付{{
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                                             ].value
@@ -617,26 +620,13 @@ export default {
         display: flex;
         flex-direction: column;
         .row {
-            // border: 1px solid red;
-            width: 100vw;
             height: 30px;
             line-height: 30px;
             display: flex;
             align-items: center;
-            justify-content: space-around;
             .avatar {
                 display: flex;
                 align-items: center;
-            }
-            .name,
-            .license_plate_number {
-                width: 4rem;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            .license_plate_number {
-                width: 4rem;
             }
         }
     }
