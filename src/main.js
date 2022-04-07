@@ -44,7 +44,8 @@ new Vue({
     Vue.prototype.$Echo = new Echo({
       broadcaster: 'pusher',
       key: "ShdHLAikrhOsNRg9",
-      wsHost: "4s.100pq.cn",
+      // wsHost: "4s.100pq.cn",
+      wsHost: "api.nightowl.name",
       wsPort: 6001,
       forceTLS: false
     });
