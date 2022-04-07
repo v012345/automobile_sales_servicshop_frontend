@@ -16,6 +16,10 @@ export default new VueRouter({
             component: () => import('@/views/franchise/index')
         },
         {
+            path: '/pay',
+            component: () => import('@/views/pay/index')
+        },
+        {
             path: '*',
             component: () => import('@/views/home/index')
         }
