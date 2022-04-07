@@ -23,14 +23,20 @@ export default {
   },
   async created() {
     // restore context
-    if (sessionStorage.getItem("store")) {
-      // this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
+    // if (sessionStorage.getItem("store")) {
+    //   this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem("store"))))
+    // }
+
+    // restore context
+    if (localStorage.getItem("storeV3")) {
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(localStorage.getItem("storeV3"))))
     }
 
     // report user browse duration
     localStorage.open_at = this.$dayjs().unix()
     window.addEventListener("pagehide", () => {
-      sessionStorage.setItem("store", JSON.stringify(this.$store.state))
+      // sessionStorage.setItem("store", JSON.stringify(this.$store.state))
+      localStorage.setItem("storeV3", JSON.stringify(this.$store.state))
       let left_at = Math.floor(Date.now() / 1000)
       let open_at = parseInt(localStorage.open_at)
       let duration = left_at - open_at
