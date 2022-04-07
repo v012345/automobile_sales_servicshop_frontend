@@ -149,8 +149,12 @@ export default {
         ...mapState(['user', "config"]),
     },
     created() {
+        if (localStorage.getItem("franchisees")) {
+            this.franchisees = JSON.parse(localStorage.getItem("franchisees"));
+        }
         this.axios.get(this.$api + "franchisees").then((response) => {
             this.franchisees = response.data
+            localStorage.setItem("franchisees", JSON.stringify(response.data))
             // console.log(response.data);
         })
         this.axios.get(this.$api + "brands").then((response) => {
