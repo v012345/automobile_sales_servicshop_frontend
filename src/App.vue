@@ -43,6 +43,7 @@ export default {
     // get global config
     this.axios.get(this.$api + "system/config").then((response) => {
       this.$store.dispatch("setConfig", response.data)
+      console.log(response.data)
     });
 
 

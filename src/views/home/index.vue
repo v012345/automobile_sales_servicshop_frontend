@@ -112,7 +112,6 @@
                     :key="i.id"
                 >
                     <van-image
-                        width="90%"
                         round
                         fit="cover"
                         :src="activity.participants[i - 1].participant_info.avatar"
@@ -257,28 +256,34 @@
                 closeable
                 position="top"
                 :style="{
-                    minHeight: '100vw',
+                    minHeight: '150vw',
                     paddingTop: '3rem',
                     boxSizing: 'border-box',
                 }"
             >
                 <van-tabs type="card">
                     <van-tab title="活动说明">
-                        <div style="margin-top: 1rem">
-                            <van-button round type="default">参与记录</van-button>
+                        <div class="activity-desc">
+                            <h3>参与记录</h3>
                             <div
                                 v-if="haveACoupon && availableCoupons.length > 0"
                             >{{ availableCoupons[0].created_at }}参加活动</div>
                             <div v-else>未参加</div>
                         </div>
-                        <div>
-                            <van-button round type="default">活动时间</van-button>
+                        <div class="activity-desc">
+                            <h3>活动时间</h3>
                             <div>{{ activity.start_at }} 至 {{ activity.end_at }}</div>
                         </div>
-                        <div>
-                            <van-button round type="default">技术支持</van-button>
+                        <div class="activity-desc">
+                            <h3>技术支持</h3>
                             <div>页面技术由{{ config.tech_surppot }}提供</div>
                         </div>
+                        <template v-if="config.custom">
+                            <div class="activity-desc" v-for="(c, i) in config.custom" :key="i">
+                                <h3>{{ c.department }}</h3>
+                                <div>{{ c.title }}</div>
+                            </div>
+                        </template>
                     </van-tab>
                     <van-tab title="我的奖品">
                         <div
@@ -556,19 +561,22 @@ export default {
     async mounted() {
 
         // get activity configration only for init `this.sign_up_form.licensePlateNumber`
-        let result = window.location.href.match(RegExp("(/activity/)([0-9]+)"))
-        if (result) {
-            localStorage.activityId = result[result.length - 1]
-        }
-        console.log("home index activityId", localStorage.activityId);
         try {
-            let response = await this.axios.post(this.$api + "v3/activity/configration", {
-                activityId: localStorage.activityId,
-            })
-            this.$store.dispatch("setActivityConfig", response.data);
-            console.log("activity config", response.data);
-            localStorage.activityId = response.data.activity_id;
-            this.sign_up_form.licensePlateNumber = response.data.license_plate_number_prefix
+            if (!(this.activity.id && this.activity.id == this.activityConfig.activity_id)) {
+                let result = window.location.href.match(RegExp("(/activity/)([0-9]+)"))
+                if (result) {
+                    localStorage.activityId = result[result.length - 1]
+                }
+                let response = await this.axios.post(this.$api + "v3/activity/configration", {
+                    activityId: localStorage.activityId,
+                })
+                this.$store.dispatch("setActivityConfig", response.data);
+                console.log("activity config", response.data);
+                localStorage.activityId = response.data.activity_id;
+                this.sign_up_form.licensePlateNumber = response.data.license_plate_number_prefix
+            } else {
+                this.sign_up_form.licensePlateNumber = this.activityConfig.license_plate_number_prefix
+            }
         } catch (err) {
             console.log("no activity config")
         }
@@ -701,6 +709,9 @@ export default {
     .sign-up-button {
         background-color: rgb(255, 144, 0);
     }
+}
+.activity-desc {
+    margin-top: 1rem;
 }
 </style>
 
