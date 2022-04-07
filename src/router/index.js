@@ -23,5 +23,12 @@ export default new VueRouter({
             path: '*',
             component: () => import('@/views/home/index')
         }
-    ]
+    ],
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { top: 0 }
+        }
+    }
 })
