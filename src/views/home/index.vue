@@ -102,9 +102,12 @@
         </div>
 
         <template v-if="activity.id">
+            <!-- <div
+                class="van-hairline--bottom"
+            >已有{{ activity.participants.length + activity.offset.participants }}人关注</div>-->
             <div
                 class="van-hairline--bottom"
-            >已有{{ activity.participants.length + activity.offset.participants }}人关注</div>
+            >已有{{ activity.participants_count + activity.offset.participants }}人关注</div>
             <div class="participant-avatar">
                 <div
                     class="avatar"
@@ -118,9 +121,13 @@
                     />
                 </div>
             </div>
+            <!-- <div
+                class="van-hairline--bottom"
+            >已参与{{ normalCoupons.total + activity.offset.coupons }}人</div>-->
             <div
                 class="van-hairline--bottom"
-            >已参与{{ normalCoupons.total + activity.offset.coupons }}人</div>
+            >已参与{{ activity.sales_number + activity.offset.coupons }}人</div>
+
             <div>
                 <van-notice-bar :scrollable="false" style="padding: 0; height: 60px">
                     <van-swipe
