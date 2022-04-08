@@ -340,7 +340,7 @@ export default {
     name: "Home",
     data() {
         return {
-
+            flags: {},
             showCarModelPicker: false,
             cascaderValue: '',
             showIntroduction: false,
@@ -493,7 +493,7 @@ export default {
                     ...response.data,
                     timestamp: response.data.timeStamp,
                     success: () => {
-                        if (this.hasBought)
+                        if (this.flags.hasBought)
                             return;
                         this.isPaying = true;
                         Toast.loading({
@@ -600,24 +600,30 @@ export default {
         }
 
         // this.$Echo.channel(`test`).listen("Test", (e) => {
-        //     console.log(123)
+        //     // console.log("e")
+        //     // this.$set(this._data, "hasBought", true);
+        //     // console.log(this);
+        //     // this.axios.post(this.$api + "v3/init", {
+        //     //     activityId: localStorage.activityId,
+        //     //     temporaryId: localStorage.temporaryId
+        //     // }).then((response) => {
+        //     //     Toast.clear();
+        //     //     this.$store.dispatch("init", response.data);
+        //     // })
         // })
 
-
-        this.$Echo.channel(`4s`)
-            .listen('Paid', (e) => {
-                if (e.user_id == this.user.id) {
-                    this.$set(this.data, "hasBought", true);
-                    this.axios.post(this.$api + "v3/init", {
-                        activityId: localStorage.activityId,
-                        temporaryId: localStorage.temporaryId
-                    }).then((response) => {
-
-                        Toast.clear();
-                        this.$store.dispatch("init", response.data);
-                    })
-                }
-            });
+        this.$Echo.channel(`4s`).listen('Paid', (e) => {
+            if (e.user_id == this.user.id) {
+                this.$set(this.flags, "hasBought", true);
+                this.axios.post(this.$api + "v3/init", {
+                    activityId: localStorage.activityId,
+                    temporaryId: localStorage.temporaryId
+                }).then((response) => {
+                    Toast.clear();
+                    this.$store.dispatch("init", response.data);
+                })
+            }
+        });
     },
 };
 </script>
