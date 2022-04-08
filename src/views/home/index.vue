@@ -488,6 +488,7 @@ export default {
                     ...response.data,
                     timestamp: response.data.timeStamp,
                     success: () => {
+                        this.isPaying = true;
                     },
                 });
             }).catch((error) => {
