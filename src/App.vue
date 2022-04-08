@@ -120,6 +120,10 @@ export default {
         });
     }
 
+    // this.$Echo.channel(`test`).listen("Test", (e) => {
+    //   console.log(123)
+    // })
+
 
     // config jssdk
     try {

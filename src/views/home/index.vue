@@ -585,29 +585,56 @@ export default {
             console.log("no activity config")
         }
 
+        // this.$Echo.channel(`test`).listen("Test", (e) => {
+        //     console.log(123)
+        // })
+
 
         this.$Echo.channel(`4s`)
             .listen('Paid', (e) => {
                 if (e.user_id == this.user.id) {
-                    this.axios
-                        .post(this.$api + "login", {
-                            temporaryId: localStorage.temporaryId,
-                        })
-                        .then((response) => {
-                            if (response.status == 200) {
-                                this.$store.dispatch("setUser", response.data)
-                            }
-                        });
-                    this.axios
-                        .get(this.$api + "activity/" + this.activity.id)
-                        .then((response) => {
-                            if (!this.$dayjs().isBefore(response.data.end_at)) {
-                                response.data.state = "ended";
+                    this.axios.post(this.$api + "v3/init", {
+                        activityId: localStorage.activityId,
+                        temporaryId: localStorage.temporaryId
+                    }).then((response) => {
+                        if (response.data.activity) {
+                            let activity = response.data.activity
+                            if (!this.$dayjs().isBefore(activity.end_at)) {
+                                activity.state = "ended";
                             } else {
-                                response.data.state = "inProgress";
+                                activity.state = "inProgress";
                             }
-                            this.$store.dispatch("setActivity", response.data);
-                        });
+                            this.$store.dispatch("setActivity", activity);
+                            localStorage.activityId = activity.id;
+                        }
+                        if (response.data.activity_config) {
+                            let activity_config = response.data.activity_config
+                            this.$store.dispatch("setActivityConfig", activity_config);
+                        }
+                        if (response.data.user) {
+                            let user = response.data.user
+                            this.$store.dispatch("setUser", user)
+                        }
+                    })
+                    // this.axios
+                    //     .post(this.$api + "login", {
+                    //         temporaryId: localStorage.temporaryId,
+                    //     })
+                    //     .then((response) => {
+                    //         if (response.status == 200) {
+                    //             this.$store.dispatch("setUser", response.data)
+                    //         }
+                    //     });
+                    // this.axios
+                    //     .get(this.$api + "activity/" + this.activity.id)
+                    //     .then((response) => {
+                    //         if (!this.$dayjs().isBefore(response.data.end_at)) {
+                    //             response.data.state = "ended";
+                    //         } else {
+                    //             response.data.state = "inProgress";
+                    //         }
+                    //         this.$store.dispatch("setActivity", response.data);
+                    //     });
                 }
             });
     },
