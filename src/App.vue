@@ -72,6 +72,8 @@ export default {
       localStorage.activityId = result[result.length - 1]
     }
 
+    // let searchParams = new URLSearchParams(paramsString);
+
     try {
       let response = await this.axios.post(this.$api + "v3/init", {
         activityId: localStorage.activityId,
@@ -83,7 +85,7 @@ export default {
         activityId: response.data.activity.id,
       });
     } catch (err) {
-
+      return
       this.axios
         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
           params: {
@@ -96,9 +98,9 @@ export default {
         });
     }
 
-    // this.$Echo.channel(`test`).listen("Test", (e) => {
-    //   console.log(123)
-    // })
+    this.$Echo.channel(`test`).listen("Test", (e) => {
+      console.log(123)
+    })
 
 
     // config jssdk
