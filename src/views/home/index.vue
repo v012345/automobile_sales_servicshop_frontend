@@ -466,6 +466,11 @@ export default {
                     return;
                 }
             }
+            Toast.loading({
+                message: "正在购买,请稍等",
+                forbidClick: true,
+                duration: 0,
+            });
 
             if (this.isPaying) {
                 Toast({ message: "正在购买,请稍等" });
@@ -550,16 +555,17 @@ export default {
                     duration: 0,
                 });
 
-                this.axios
-                    .get(
-                        this.$api +
-                        `activity/${this.activity.id}/participant/${this.user.id}/poster/`
-                    )
-                    .then((response) => {
-                        Toast.clear();
-                        this.poster.src = response.data;
-                        this.poster.show = true;
-                    });
+                this.axios.post(this.$api + `v3/activity/${this.activity.id}/participant/${this.user.id}/poster`, {
+                    content: window.location.origin + `/activity/${this.activity.id}/inviter/${this.user.id}`,
+                    image: this.$qrcode.getQrBase64(window.location.origin + `/activity/${this.activity.id}/inviter/${this.user.id}`, {
+                        width: 150,
+                        height: 150,
+                    })
+                }).then((response) => {
+                    Toast.clear();
+                    this.poster.src = response.data;
+                    this.poster.show = true;
+                });
             }
         },
     },
@@ -598,6 +604,7 @@ export default {
                         activityId: localStorage.activityId,
                         temporaryId: localStorage.temporaryId
                     }).then((response) => {
+                        Toast.clear();
                         if (response.data.activity) {
                             let activity = response.data.activity
                             if (!this.$dayjs().isBefore(activity.end_at)) {
