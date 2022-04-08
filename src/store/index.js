@@ -1,11 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import dayjs from 'dayjs'
 Vue.use(Vuex)
 
 const actions = {
     add(context, value) {
         context.commit("ADD", value)
     },
+
+    init(context, value) {
+        if (value.user) {
+            context.commit("SET_USER", value.user)
+        }
+        if (value.activity_config) {
+            context.commit("SET_ACTIVITY_CONFIG", value.activity_config)
+        }
+        if (value.activity) {
+            let activity = value.activity;
+            if (!dayjs().isBefore(activity.end_at)) {
+                activity.state = "ended";
+            } else {
+                activity.state = "inProgress";
+            }
+            document.title = activity.title;
+            localStorage.activityId = activity.id;
+            context.commit("SET_ACTIVITY", activity)
+            // this.$store.dispatch("setActivity", activity);
+        }
+    },
+
     setConfig(context, value) {
         context.commit("SET_CONFIG", value)
     },

@@ -77,35 +77,11 @@ export default {
         activityId: localStorage.activityId,
         temporaryId: localStorage.temporaryId
       })
-      console.log(response.data)
-      if (response.data.activity) {
-        let activity = response.data.activity
-        document.title = activity.title;
-        if (!this.$dayjs().isBefore(activity.end_at)) {
-          activity.state = "ended";
-        } else {
-          activity.state = "inProgress";
-        }
-        this.$store.dispatch("setActivity", activity);
-        localStorage.activityId = activity.id;
-      }
-
-      if (response.data.activity_config) {
-        let activity_config = response.data.activity_config
-        this.$store.dispatch("setActivityConfig", activity_config);
-      }
-
-      if (response.data.user) {
-        let user = response.data.user
-        this.$store.dispatch("setUser", user)
-        this.axios.post(this.$api + "activity/participate", {
-          userId: user.id,
-          activityId: localStorage.activityId,
-        });
-      } else {
-        throw new Error()
-      }
-
+      this.$store.dispatch("init", response.data);
+      this.axios.post(this.$api + "activity/participate", {
+        userId: response.data.user.id,
+        activityId: response.data.activity.id,
+      });
     } catch (err) {
 
       this.axios
