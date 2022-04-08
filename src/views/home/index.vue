@@ -467,7 +467,7 @@ export default {
                 }
             }
             Toast.loading({
-                message: "正在购买,请稍等",
+                message: "请求支付中",
                 forbidClick: true,
                 duration: 0,
             });
@@ -493,7 +493,14 @@ export default {
                     ...response.data,
                     timestamp: response.data.timeStamp,
                     success: () => {
+                        if (this.hasBought)
+                            return;
                         this.isPaying = true;
+                        Toast.loading({
+                            message: "正在取回优惠券,请稍等",
+                            forbidClick: true,
+                            duration: 0,
+                        });
                     },
                 });
             }).catch((error) => {
@@ -600,30 +607,14 @@ export default {
         this.$Echo.channel(`4s`)
             .listen('Paid', (e) => {
                 if (e.user_id == this.user.id) {
+                    this.$set(this.data, "hasBought", true);
                     this.axios.post(this.$api + "v3/init", {
                         activityId: localStorage.activityId,
                         temporaryId: localStorage.temporaryId
                     }).then((response) => {
+
                         Toast.clear();
                         this.$store.dispatch("init", response.data);
-                        // if (response.data.activity) {
-                        //     let activity = response.data.activity
-                        //     if (!this.$dayjs().isBefore(activity.end_at)) {
-                        //         activity.state = "ended";
-                        //     } else {
-                        //         activity.state = "inProgress";
-                        //     }
-                        //     this.$store.dispatch("setActivity", activity);
-                        //     localStorage.activityId = activity.id;
-                        // }
-                        // if (response.data.activity_config) {
-                        //     let activity_config = response.data.activity_config
-                        //     this.$store.dispatch("setActivityConfig", activity_config);
-                        // }
-                        // if (response.data.user) {
-                        //     let user = response.data.user
-                        //     this.$store.dispatch("setUser", user)
-                        // }
                     })
                 }
             });
