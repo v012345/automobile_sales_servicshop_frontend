@@ -3,54 +3,30 @@
         <div v-if="user.id && activity.id && activityConfig.activity_id" class="card-container">
             <van-tabs type="card">
                 <van-tab title="可用的" name="available">
-                    <div
-                        v-for="coupon in availableCoupons"
-                        @click="dealWithTheCoupon(coupon)"
-                        :key="coupon.id"
-                    >
-                        <Coupon
-                            :value="activityConfig.normal_coupon_value"
-                            :allow_to_use_at="activity.allow_to_use_at"
-                            :expire_at="activity.expire_at"
-                            :description="activityConfig.normal_coupon_description"
-                            :available="coupon.state == 'available'"
-                        ></Coupon>
+                    <div v-for="coupon in availableCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
+                        <Coupon :value="activityConfig.normal_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
+                            :expire_at="activity.expire_at" :description="activityConfig.normal_coupon_description"
+                            :available="coupon.state == 'available'"></Coupon>
                     </div>
                 </van-tab>
                 <van-tab title="分享的" name="shared">
-                    <div
-                        v-for="coupon in sharedCoupons"
-                        @click="dealWithTheCoupon(coupon)"
-                        :key="coupon.id"
-                    >
-                        <Coupon
-                            :value="activityConfig.shared_coupon_value"
-                            :allow_to_use_at="activity.allow_to_use_at"
-                            :expire_at="activity.expire_at"
-                            :description="activityConfig.shared_coupon_description"
-                            :available="coupon.state == 'available'"
-                        ></Coupon>
+                    <div v-for="coupon in sharedCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
+                        <Coupon :value="activityConfig.shared_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
+                            :expire_at="activity.expire_at" :description="activityConfig.shared_coupon_description"
+                            :available="coupon.state == 'available'"></Coupon>
                     </div>
                 </van-tab>
                 <van-tab title="失效的" name="expired">
                     <div v-for="coupon in expiredCoupons" :key="coupon.id">
                         <template v-if="coupon.type == 'normal'">
-                            <Coupon
-                                :value="activityConfig.normal_coupon_value"
-                                :allow_to_use_at="activity.allow_to_use_at"
-                                :expire_at="activity.expire_at"
-                                :description="activityConfig.normal_coupon_description"
-                                :available="false"
-                            ></Coupon>
+                            <Coupon :value="activityConfig.normal_coupon_value"
+                                :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
+                                :description="activityConfig.normal_coupon_description" :available="false"></Coupon>
                         </template>
                         <template v-else>
-                            <Coupon
-                                :value="activityConfig.shared_coupon_value"
-                                :allow_to_use_at="activity.allow_to_use_at"
-                                :expire_at="activity.expire_at"
-                                :description="activityConfig.shared_coupon_description"
-                                :available="false"
-                            ></Coupon>
+                            <Coupon :value="activityConfig.shared_coupon_value"
+                                :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
+                                :description="activityConfig.shared_coupon_description" :available="false"></Coupon>
                         </template>
                     </div>
                 </van-tab>
@@ -128,16 +104,24 @@ export default {
         this.$Echo.channel(`4s`)
             .listen('Used', (e) => {
                 if (e.user_id == this.user.id) {
-                    this.showQrcode = false;
-                    this.axios
-                        .post(this.$api + "login", {
-                            temporaryId: localStorage.temporaryId,
-                        })
-                        .then((response) => {
-                            if (response.status == 200) {
-                                this.$store.dispatch("setUser", response.data)
-                            }
-                        });
+
+                    this.axios.post(this.$api + "v3/init", {
+                        activityId: localStorage.activityId,
+                        temporaryId: localStorage.temporaryId
+                    }).then((response) => {
+                        this.showQrcode = false;
+                        this.$store.dispatch("init", response.data);
+                    })
+
+                    // this.axios
+                    //     .post(this.$api + "login", {
+                    //         temporaryId: localStorage.temporaryId,
+                    //     })
+                    //     .then((response) => {
+                    //         if (response.status == 200) {
+                    //             this.$store.dispatch("setUser", response.data)
+                    //         }
+                    //     });
                 }
             });
     }
