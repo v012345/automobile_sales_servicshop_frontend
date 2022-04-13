@@ -85,7 +85,6 @@ export default {
         activityId: response.data.activity.id,
       });
     } catch (err) {
-      return
       this.axios
         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
           params: {
