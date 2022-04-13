@@ -1,17 +1,8 @@
 <template>
     <div>
         <template v-if="activity.id">
-            <video
-                preload="auto"
-                width="100%"
-                height="300"
-                controls="controls"
-                x5-video-player-fullscreen="false"
-                x5-playsinline
-                playsinline
-                webkit-playsinline="true"
-                :poster="$backend + activity.video_thumbnail"
-            >
+            <video preload="auto" width="100%" height="300" controls="controls" x5-video-player-fullscreen="false"
+                x5-playsinline playsinline webkit-playsinline="true" :poster="$backend + activity.video_thumbnail">
                 <source :src="$backend + activity.video" type="video/mp4" />
             </video>
 
@@ -20,64 +11,28 @@
 
         <van-form>
             <van-field v-model="activity.shop" label="门店名称" readonly placeholder="门店名称" />
-            <van-field
-                @click="call(activity.tel)"
-                clickable
-                v-model="activity.tel"
-                label="门店电话"
-                readonly
-                placeholder="门店电话"
-                right-icon="phone-o"
-            />
+            <van-field @click="call(activity.tel)" clickable v-model="activity.tel" label="门店电话" readonly
+                placeholder="门店电话" right-icon="phone-o" />
 
-            <van-field
-                @click="locate(activity.location)"
-                clickable
-                readonly
-                v-model="activity.address"
-                label="门店地址"
-                placeholder="门店地址"
-                right-icon="location-o"
-            />
+            <van-field @click="locate(activity.location)" clickable readonly v-model="activity.address" label="门店地址"
+                placeholder="门店地址" right-icon="location-o" />
         </van-form>
         <h3 ref="sign_up_form">信息登记处</h3>
 
         <van-form>
             <template v-if="activityConfig.show_license_plate_number_field">
-                <van-field
-                    v-model.trim="sign_up_form.licensePlateNumber"
-                    required
-                    label="车牌号"
-                    placeholder="车牌号"
-                />
+                <van-field v-model.trim="sign_up_form.licensePlateNumber" required label="车牌号" placeholder="车牌号" />
             </template>
 
-            <van-field
-                required
-                v-model.trim="sign_up_form.phoneNumber"
-                label="手机号"
-                placeholder="手机号"
-                type="number"
-            />
+            <van-field required v-model.trim="sign_up_form.phoneNumber" label="手机号" placeholder="手机号" type="number" />
             <van-field required v-model.trim="sign_up_form.name" label="姓名" placeholder="姓名" />
 
             <template v-if="activityConfig.allow_user_inputing_car_model">
-                <van-field
-                    required
-                    v-model.trim="sign_up_form.carModel"
-                    label="车型"
-                    placeholder="车型"
-                />
+                <van-field required v-model.trim="sign_up_form.carModel" label="车型" placeholder="车型" />
             </template>
             <template v-else>
-                <van-field
-                    required
-                    readonly
-                    v-model.trim="sign_up_form.carModel"
-                    label="车型"
-                    placeholder="车型"
-                    @click="showCarModelPicker = true"
-                />
+                <van-field required readonly v-model.trim="sign_up_form.carModel" label="车型" placeholder="车型"
+                    @click="showCarModelPicker = true" />
             </template>
         </van-form>
         <div class="count-down">
@@ -87,11 +42,7 @@
                     <div>报名参加活动</div>
                     <div>活动倒计时</div>
                     <div>
-                        <van-count-down
-                            @finish="activityEnds"
-                            :time="countDown"
-                            format="DD 天 HH时 mm分 ss秒"
-                        />
+                        <van-count-down @finish="activityEnds" :time="countDown" format="DD 天 HH时 mm分 ss秒" />
                     </div>
                 </template>
                 <template v-else>
@@ -105,58 +56,32 @@
             <!-- <div
                 class="van-hairline--bottom"
             >已有{{ activity.participants.length + activity.offset.participants }}人关注</div>-->
-            <div
-                class="van-hairline--bottom"
-            >已有{{ activity.participants_count + activity.offset.participants }}人关注</div>
+            <div class="van-hairline--bottom">已有{{ activity.participants_count + activity.offset.participants }}人关注
+            </div>
             <div class="participant-avatar">
-                <div
-                    class="avatar"
-                    v-for="i in Math.min(33, activity.participants.length)"
-                    :key="i.id"
-                >
-                    <van-image
-                        round
-                        fit="cover"
-                        :src="activity.participants[i - 1].participant_info.avatar"
-                    />
+                <div class="avatar" v-for="i in Math.min(33, activity.participants.length)" :key="i.id">
+                    <van-image round fit="cover" :src="activity.participants[i - 1].participant_info.avatar" />
                 </div>
             </div>
             <!-- <div
                 class="van-hairline--bottom"
             >已参与{{ normalCoupons.total + activity.offset.coupons }}人</div>-->
-            <div
-                class="van-hairline--bottom"
-            >已参与{{ activity.sales_number + activity.offset.coupons }}人</div>
+            <div class="van-hairline--bottom">已参与{{ activity.sales_number + activity.offset.coupons }}人</div>
 
             <div>
                 <van-notice-bar :scrollable="false" style="padding: 0; height: 60px">
-                    <van-swipe
-                        class="notice-swipe"
-                        vertical
-                        :autoplay="3000"
-                        :show-indicators="false"
-                    >
-                        <van-swipe-item
-                            v-for="i in Math.ceil(normalCoupons.coupons.length / 2)"
-                            :key="i"
-                        >
+                    <van-swipe class="notice-swipe" vertical :autoplay="3000" :show-indicators="false">
+                        <van-swipe-item v-for="i in Math.ceil(normalCoupons.coupons.length / 2)" :key="i">
                             <div class="swipe-item">
                                 <div class="row" v-for="j in 2" :key="j">
                                     <div class="avatar">
-                                        <van-image
-                                            @click="log(normalCoupons.coupons[
-                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                            ].participant)"
-                                            height="25px"
-                                            width="25px"
-                                            fit="cover"
-                                            round
-                                            :src="
-                                                normalCoupons.coupons[
-                                                    (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                                ].participant.participant_info.avatar
-                                            "
-                                        />
+                                        <van-image @click="log(normalCoupons.coupons[
+                                            (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                        ].participant)" height="25px" width="25px" fit="cover" round :src="
+    normalCoupons.coupons[
+        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+    ].participant.participant_info.avatar
+" />
                                     </div>
 
                                     <div class="name" style="margin-right: 0.5rem;">
@@ -166,13 +91,9 @@
                                             ].participant.participant_info.name
                                         }}
                                     </div>
-                                    <div
-                                        class="license_plate_number"
-                                        style="margin-right: 0.5rem"
-                                        v-if="activityConfig.show_license_plate_number_field && normalCoupons.coupons[
-                                            (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                        ].participant.license_plate_number"
-                                    >
+                                    <div class="license_plate_number" style="margin-right: 0.5rem" v-if="activityConfig.show_license_plate_number_field && normalCoupons.coupons[
+                                        (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                    ].participant.license_plate_number">
                                         {{
                                             normalCoupons.coupons[
                                                 (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
@@ -215,11 +136,7 @@
         </div>
 
         <template v-if="activity.id">
-            <van-image
-                v-for="(image, i) in activity.propaganda_images"
-                :key="i"
-                :src="$backend + image"
-            />
+            <van-image v-for="(image, i) in activity.propaganda_images" :key="i" :src="$backend + image" />
         </template>
         <div style="display:flex;justify-content:center">
             <img @click="franchise" width="150px" height="45px" src="@/assets/apply_button.png" />
@@ -255,23 +172,18 @@
             </template>
         </div>
         <div>
-            <van-popup
-                v-model="showIntroduction"
-                closeable
-                position="top"
-                :style="{
-                    minHeight: '150vw',
-                    paddingTop: '3rem',
-                    boxSizing: 'border-box',
-                }"
-            >
+            <van-popup v-model="showIntroduction" closeable position="top" :style="{
+                minHeight: '150vw',
+                paddingTop: '3rem',
+                boxSizing: 'border-box',
+            }">
                 <van-tabs type="card">
                     <van-tab title="活动说明">
                         <div class="activity-desc">
                             <h3>参与记录</h3>
-                            <div
-                                v-if="haveACoupon && availableCoupons.length > 0"
-                            >{{ availableCoupons[0].created_at }}参加活动</div>
+                            <div v-if="haveACoupon && availableCoupons.length > 0">{{
+                                availableCoupons[0].created_at
+                            }}参加活动</div>
                             <div v-else>未参加</div>
                         </div>
                         <div class="activity-desc">
@@ -290,18 +202,10 @@
                         </template>
                     </van-tab>
                     <van-tab title="我的奖品">
-                        <div
-                            v-for="coupon in availableCoupons"
-                            :key="coupon.id"
-                            @click="toCouponsView"
-                        >
-                            <Coupon
-                                :value="activityConfig.normal_coupon_value"
-                                :allow_to_use_at="activity.allow_to_use_at"
-                                :expire_at="activity.expire_at"
-                                :description="activityConfig.normal_coupon_description"
-                                :available="true"
-                            ></Coupon>
+                        <div v-for="coupon in availableCoupons" :key="coupon.id" @click="toCouponsView">
+                            <Coupon :value="activityConfig.normal_coupon_value"
+                                :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
+                                :description="activityConfig.normal_coupon_description" :available="true"></Coupon>
                         </div>
                     </van-tab>
                 </van-tabs>
@@ -317,13 +221,8 @@
         </div>
         <div>
             <van-popup v-model="showCarModelPicker" round position="bottom">
-                <van-cascader
-                    v-model="cascaderValue"
-                    title="选择车型"
-                    :options="activityConfig.brand_category"
-                    @close="showCarModelPicker = false"
-                    @finish="onFinish"
-                />
+                <van-cascader v-model="cascaderValue" title="选择车型" :options="activityConfig.brand_category"
+                    @close="showCarModelPicker = false" @finish="onFinish" />
             </van-popup>
         </div>
     </div>
@@ -478,7 +377,7 @@ export default {
             }
 
             this.isPaying = true;
-            this.axios.post(this.$api + "pay", {
+            this.axios.post(this.$api + "v3/pay", {
                 amount: this.activity.signing_up_fee,
                 payer: this.user.id,
                 open_id: this.user.open_id,
@@ -632,11 +531,13 @@ export default {
 .notice-swipe {
     height: 60px;
     line-height: 60px;
+
     .swipe-item {
         height: 60px;
         line-height: 60px;
         display: flex;
         flex-direction: column;
+
         .row {
             // border: 1px solid red;
             width: 100vw;
@@ -645,10 +546,12 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-around;
+
             .avatar {
                 display: flex;
                 align-items: center;
             }
+
             .name,
             .license_plate_number {
                 width: 4rem;
@@ -656,16 +559,19 @@ export default {
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
+
             .license_plate_number {
                 width: 4rem;
             }
         }
     }
 }
+
 .participant-avatar {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+
     .avatar {
         display: flex;
         justify-content: center;
@@ -673,18 +579,23 @@ export default {
         height: 9.09vw;
     }
 }
+
 .coupon-buttons {
     display: flex;
+
     div {
         width: 50%;
+
         img {
             width: 100%;
         }
     }
 }
+
 .count-down {
     position: relative;
     width: 100vw;
+
     .text {
         color: aliceblue;
         height: 100%;
@@ -695,18 +606,22 @@ export default {
         flex-direction: column;
         justify-content: space-evenly;
     }
+
     img {
         width: 100%;
     }
 }
+
 .poster {
     width: 80vw;
     height: 75vh;
     overflow: scroll;
+
     &::-webkit-scrollbar {
         display: none;
     }
 }
+
 .share-button {
     // border: 3px solid #b8b8b8;
     position: fixed;
@@ -715,10 +630,12 @@ export default {
     right: 10px;
     // background-color: rgba(0, 0, 0, 0.397);
 }
+
 .footer {
     height: 140px;
     text-align: center;
 }
+
 .bottom-buttons {
     position: fixed;
     bottom: 2rem;
@@ -734,13 +651,16 @@ export default {
         width: 50%;
         height: 60px;
     }
+
     .introduction-button {
         background-color: rgb(255, 80, 1);
     }
+
     .sign-up-button {
         background-color: rgb(255, 144, 0);
     }
 }
+
 .activity-desc {
     margin-top: 1rem;
 }
