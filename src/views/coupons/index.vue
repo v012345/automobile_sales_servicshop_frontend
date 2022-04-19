@@ -48,7 +48,9 @@
             </van-popup>
         </div>
         <div class="footer-nav">
-            <van-button type="info" block @click="$router.back()">返回首页 <br> 已有人{{ activity.sales_number }}参与
+            <van-button type="info" block @click="$router.back()">返回首页 <br><span class="sales_number">已有人{{
+                activity.sales_number
+            }}参与</span>
             </van-button>
             <div class="middle-button">
                 <van-button type="danger" @click="showOfficialAccountQrcode = true" size="large" block>关注公众号<br>获取更多好礼
@@ -197,6 +199,10 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
+
+    .sales_number {
+        font-size: 0.8rem;
+    }
 
     .middle-button {
         min-width: 38vw;
