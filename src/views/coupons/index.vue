@@ -37,14 +37,20 @@
                 <van-image :src="qrcode" />
             </van-popup>
         </div>
+        <div>
+            <van-popup v-model="showOfficialAccountQrcode">
+                <van-image :src="'http://cdn4s.100pq.cn/official_account_qrcode.jpg'" />
+            </van-popup>
+        </div>
         <div class="footer-nav">
-            <van-button type="primary" block @click="$router.back()">返回首页 <br> 已有人{{ activity.sales_number }}参与
+            <van-button type="info" block @click="$router.back()">返回首页 <br> 已有人{{ activity.sales_number }}参与
             </van-button>
             <div class="middle-button">
-                <van-button type="info" size="large" block>关注公众号<br>获取更多好礼</van-button>
+                <van-button type="danger" @click="showOfficialAccountQrcode = true" size="large" block>关注公众号<br>获取更多好礼
+                </van-button>
             </div>
 
-            <van-button type="primary" block>Block 大大伟大Element</van-button>
+            <van-button type="info" block>分享活动海报<br>获取活动奖品</van-button>
         </div>
     </div>
 </template>
@@ -58,7 +64,8 @@ export default {
     data() {
         return {
             qrcode: "",
-            showQrcode: false
+            showQrcode: false,
+            showOfficialAccountQrcode: false,
         }
     },
     components: {

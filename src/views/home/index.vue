@@ -128,10 +128,11 @@
         <div class="coupon-buttons">
             <!-- <div @click="showCoupons = true"> -->
             <div @click="toCouponsView">
-                <img src="@/assets/myCoupons.jpg" />
+                <img src="@/assets/useCoupons.jpg" />
+
             </div>
             <div @click="scan">
-                <img src="@/assets/useCoupons.jpg" />
+                <img src="@/assets/myCoupons.jpg" />
             </div>
         </div>
 
