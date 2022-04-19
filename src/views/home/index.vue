@@ -479,21 +479,17 @@ export default {
 
         // get activity configration only for init `this.sign_up_form.licensePlateNumber`
         try {
-            if (!(this.activity.id && this.activity.id == this.activityConfig.activity_id)) {
-                let result = window.location.href.match(RegExp("(/activity/)([0-9]+)"))
-                if (result) {
-                    localStorage.activityId = result[result.length - 1]
-                }
-                let response = await this.axios.post(this.$api + "v3/activity/configration", {
-                    activityId: localStorage.activityId,
-                })
-                this.$store.dispatch("setActivityConfig", response.data);
-                console.log("activity config", response.data);
-                localStorage.activityId = response.data.activity_id;
-                this.sign_up_form.licensePlateNumber = response.data.license_plate_number_prefix
-            } else {
-                this.sign_up_form.licensePlateNumber = this.activityConfig.license_plate_number_prefix
+            let result = window.location.href.match(RegExp("(/activity/)([0-9]+)"))
+            if (result) {
+                localStorage.activityId = result[result.length - 1]
             }
+            let response = await this.axios.post(this.$api + "v3/activity/configration", {
+                activityId: localStorage.activityId,
+            })
+            this.$store.dispatch("setActivityConfig", response.data);
+            console.log("activity config", response.data);
+            localStorage.activityId = response.data.activity_id;
+            this.sign_up_form.licensePlateNumber = response.data.license_plate_number_prefix
         } catch (err) {
             console.log("no activity config")
         }
