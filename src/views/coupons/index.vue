@@ -116,9 +116,8 @@ export default {
     },
     methods: {
         back() {
-            // console.log(window.history.length);
-            // return;
-            if (window.history.length >= 2) {
+            Toast({ message: window.history.length });
+            if (window.history.length > 2) {
                 this.$router.back()
             } else {
                 if (this.activity.id) {
