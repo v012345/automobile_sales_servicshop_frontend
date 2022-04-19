@@ -116,7 +116,7 @@ export default {
     },
     methods: {
         back() {
-            // Toast({ message: window.history.length });
+            Toast({ message: window.history.length });
             try {
                 if (window.history.length <= 1) {
                     if (this.activity.id) {
