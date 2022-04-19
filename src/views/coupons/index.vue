@@ -116,17 +116,16 @@ export default {
     },
     methods: {
         back() {
-            Toast({ message: window.history.length });
-            if (window.history.length > 2) {
-                this.$router.back()
-            } else {
+            // Toast({ message: window.history.length });
+            if (window.history.length <= 1) {
                 if (this.activity.id) {
                     this.$router.push(`activity/${this.activity.id}`)
                 } else {
                     this.$router.push("/")
                 }
+            } else {
+                this.$router.back()
             }
-
         },
         dealWithTheCoupon(coupon) {
             if (coupon.state == "available") {
