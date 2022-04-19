@@ -472,9 +472,7 @@ export default {
             }
         },
     },
-    async mounted() {
-
-        // get activity configration only for init `this.sign_up_form.licensePlateNumber`
+    async created() {
         try {
             let result = window.location.href.match(RegExp("(/activity/)([0-9]+)"))
             if (result) {
@@ -491,6 +489,11 @@ export default {
         } catch (err) {
             console.log("no activity config")
         }
+    },
+    async mounted() {
+
+        // get activity configration only for init `this.sign_up_form.licensePlateNumber`
+
 
         // this.$Echo.channel(`test`).listen("Test", (e) => {
         //     // console.log("e")

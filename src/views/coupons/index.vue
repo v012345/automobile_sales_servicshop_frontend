@@ -117,6 +117,9 @@ export default {
                 this.qrcode = this.$qrcode.getQrBase64(coupon.id.toString());
                 this.showQrcode = true;
                 return;
+            } else if (coupon.state == "unactivated") {
+                Toast({ message: "此券还没有激活,邀请好友后激活" });
+                return;
             }
             Toast({ message: "此券已经核销" });
         },
