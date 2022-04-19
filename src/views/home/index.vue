@@ -342,15 +342,11 @@ export default {
         },
         buy() {
 
-
-
             if (!(this.user.id && this.activity.id && this.activityConfig.activity_id)) {
                 Toast({ message: "正加在载个人信息,请稍等" });
                 this.$refs.sign_up_form.scrollIntoView({ behavior: "smooth" });
                 return;
             }
-
-
 
             if (!(this.sign_up_form.phoneNumber && this.sign_up_form.name && this.sign_up_form.carModel)) {
                 Toast({ message: "请登记完整信息" });
@@ -489,7 +485,7 @@ export default {
             this.$store.dispatch("setActivityConfig", response.data);
             console.log("activity config", response.data);
             localStorage.activityId = response.data.activity_id;
-            
+
             this.sign_up_form.licensePlateNumber = response.data.license_plate_number_prefix
         } catch (err) {
             console.log("no activity config")

@@ -37,6 +37,15 @@
                 <van-image :src="qrcode" />
             </van-popup>
         </div>
+        <div class="footer-nav">
+            <van-button type="primary" block @click="$router.back()">返回首页 <br> 已有人{{ activity.sales_number }}参与
+            </van-button>
+            <div class="middle-button">
+                <van-button type="info" size="large" block>关注公众号<br>获取更多好礼</van-button>
+            </div>
+
+            <van-button type="primary" block>Block 大大伟大Element</van-button>
+        </div>
     </div>
 </template>
 
@@ -132,5 +141,19 @@ export default {
 <style lang="less" scoped>
 .card-container {
     padding-top: 20px;
+}
+
+.footer-nav {
+    position: fixed;
+    width: 100vw;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+
+    .middle-button {
+        min-width: 38vw;
+        margin: 0 5px;
+    }
 }
 </style>

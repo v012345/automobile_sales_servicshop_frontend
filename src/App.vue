@@ -92,6 +92,7 @@ export default {
         if (response.data) { this.$router.push('/coupons') }
       })
     } catch (err) {
+      return;
       this.axios
         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
           params: {
@@ -105,7 +106,7 @@ export default {
     }
 
     this.$Echo.channel(`test`).listen("Test", (e) => {
-      console.log(123)
+      console.log(e)
     })
 
 
