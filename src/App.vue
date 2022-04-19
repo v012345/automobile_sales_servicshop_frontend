@@ -89,10 +89,9 @@ export default {
         temporaryId: localStorage.temporaryId
       }).then(response => {
         console.log(response.data)
-        if (response.data) { this.$router.push('/coupons') }
+        if (response.data) { this.$router.push('/coupons').catch(() => { }); }
       })
     } catch (err) {
-      return;
       this.axios
         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
           params: {

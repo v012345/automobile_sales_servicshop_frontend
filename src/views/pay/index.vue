@@ -52,7 +52,6 @@ export default {
                 } else if (error.response.status == 400) {
                     Toast({ message: "邀请好友购买后,您可以购买" })
                 }
-
             });
         },
     },

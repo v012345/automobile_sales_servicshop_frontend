@@ -8,6 +8,10 @@ export default new VueRouter({
     mode: 'history',
     routes: [
         {
+            path: '/poster',
+            component: () => import('@/views/poster/index')
+        },
+        {
             path: '/coupons',
             component: () => import('@/views/coupons/index')
         },
@@ -25,7 +29,6 @@ export default new VueRouter({
         }
     ],
     scrollBehavior(to, from, savedPosition) {
-
         if (savedPosition) {
             return savedPosition
         } else {

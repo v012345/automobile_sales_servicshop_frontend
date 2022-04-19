@@ -8,14 +8,19 @@
                             :expire_at="activity.expire_at" :description="activityConfig.normal_coupon_description"
                             :available="coupon.state == 'available'"></Coupon>
                     </div>
-                </van-tab>
-                <van-tab title="分享的" name="shared">
                     <div v-for="coupon in sharedCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
                         <Coupon :value="activityConfig.shared_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at" :description="activityConfig.shared_coupon_description"
                             :available="coupon.state == 'available'"></Coupon>
                     </div>
                 </van-tab>
+                <!-- <van-tab title="分享的" name="shared">
+                    <div v-for="coupon in sharedCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
+                        <Coupon :value="activityConfig.shared_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
+                            :expire_at="activity.expire_at" :description="activityConfig.shared_coupon_description"
+                            :available="coupon.state == 'available'"></Coupon>
+                    </div>
+                </van-tab> -->
                 <van-tab title="失效的" name="expired">
                     <div v-for="coupon in expiredCoupons" :key="coupon.id">
                         <template v-if="coupon.type == 'normal'">
@@ -50,7 +55,7 @@
                 </van-button>
             </div>
 
-            <van-button type="info" block>分享活动海报<br>获取活动奖品</van-button>
+            <van-button type="info" block @click="generatePoster">分享活动海报<br>获取活动奖品</van-button>
         </div>
     </div>
 </template>
@@ -72,7 +77,7 @@ export default {
         Coupon,
     },
     computed: {
-        ...mapState(['activity', 'user', "config", 'activityConfig']),
+        ...mapState(['activity', 'user', "config", 'activityConfig', 'myPoster']),
         availableCoupons() {
             if (this.user.id && this.activity.id) {
                 return this.user.coupons.filter(
@@ -114,6 +119,38 @@ export default {
                 return;
             }
             Toast({ message: "此券已经核销" });
+        },
+        generatePoster() {
+
+            if (this.myPoster) {
+                if (this.myPoster.activity_id == this.activity.id) {
+                    this.$router.push('/poster')
+                    return
+                }
+            }
+
+            if (this.user.id && this.activity.id) {
+                Toast.loading({
+                    message: "正在为您生成海报",
+                    forbidClick: true,
+                    duration: 0,
+                });
+
+                this.axios.post(this.$api + `v3/activity/${this.activity.id}/participant/${this.user.id}/poster`, {
+                    content: window.location.origin + `/activity/${this.activity.id}/inviter/${this.user.id}`,
+                    image: this.$qrcode.getQrBase64(window.location.origin + `/activity/${this.activity.id}/inviter/${this.user.id}`, {
+                        width: 150,
+                        height: 150,
+                    })
+                }).then((response) => {
+                    Toast.clear();
+                    this.$store.dispatch("setMyPoster", {
+                        activity_id: this.activity.id,
+                        src: response.data,
+                    })
+                    this.$router.push('/poster')
+                });
+            }
         },
     },
     created() {

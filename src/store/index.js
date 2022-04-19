@@ -28,6 +28,9 @@ const actions = {
             // this.$store.dispatch("setActivity", activity);
         }
     },
+    setMyPoster(context, value) {
+        context.commit("SET_MY_POSTER", value)
+    },
 
     setConfig(context, value) {
         context.commit("SET_CONFIG", value)
@@ -70,6 +73,9 @@ const mutations = {
     },
     SET_API(state, value) {
         state.api = value
+    },
+    SET_MY_POSTER(state, value) {
+        state.myPoster = value
     }
 }
 const state = {
@@ -80,6 +86,10 @@ const state = {
     activityConfig: {},
     inviter: undefined,
     api: "",
+    myPoster: {
+        activity_id: undefined,
+        src: undefined,
+    },
 }
 // 类似与计算属性
 const getters = {
