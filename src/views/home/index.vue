@@ -489,6 +489,7 @@ export default {
             this.$store.dispatch("setActivityConfig", response.data);
             console.log("activity config", response.data);
             localStorage.activityId = response.data.activity_id;
+            
             this.sign_up_form.licensePlateNumber = response.data.license_plate_number_prefix
         } catch (err) {
             console.log("no activity config")

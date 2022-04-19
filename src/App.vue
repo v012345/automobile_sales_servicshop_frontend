@@ -84,6 +84,13 @@ export default {
         userId: response.data.user.id,
         activityId: response.data.activity.id,
       });
+      this.axios.post(this.$api + "v3/ask/participant/has_coupon", {
+        activityId: response.data.activity.id,
+        temporaryId: localStorage.temporaryId
+      }).then(response => {
+        console.log(response.data)
+        if (response.data) { this.$router.push('/coupons') }
+      })
     } catch (err) {
       this.axios
         .get(this.$api + "v3/wechat/redirect_uri/" + localStorage.temporaryId, {
