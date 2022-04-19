@@ -4,14 +4,8 @@
             <van-image width="100vw" :src="$backend + config.franchise_banner" />
         </div>
         <div>
-            <van-field
-                v-model="form.division"
-                is-link
-                readonly
-                label="区域"
-                placeholder="区域选择"
-                @click="showCityPicker = true"
-            />
+            <van-field v-model="form.division" is-link readonly label="区域" placeholder="区域选择"
+                @click="showCityPicker = true" />
             <!-- <van-field
                 v-model="form.brand"
                 is-link
@@ -38,7 +32,7 @@
 
             <van-button @click="franchise" type="warning" block>立即报名</van-button>
         </div>
-        <div>
+        <div v-if="false">
             <van-grid direction="horizontal" :column-num="5">
                 <van-grid-item text="序号" />
                 <van-grid-item text="城市" />
@@ -46,12 +40,8 @@
                 <van-grid-item text="售卡" />
                 <van-grid-item text="转介绍" />
             </van-grid>
-            <van-grid
-                v-for="(franchisee, i) in franchisees"
-                :key="franchisee.id"
-                direction="horizontal"
-                :column-num="5"
-            >
+            <van-grid v-for="(franchisee, i) in franchisees" :key="franchisee.id" direction="horizontal"
+                :column-num="5">
                 <van-grid-item :text="(i + 1).toString()" />
                 <van-grid-item :text="franchisee.city" />
                 <van-grid-item :text="franchisee.brand" />
@@ -62,23 +52,14 @@
         <div>
             <van-popup v-model="showBrandPicker" position="bottom">
                 <!-- <van-search v-model="brand" placeholder="Placeholder" /> -->
-                <van-tree-select
-                    :items="brands"
-                    :active-id.sync="activeId"
-                    :main-active-index.sync="activeIndex"
-                    @click-item="selectBrand"
-                />
+                <van-tree-select :items="brands" :active-id.sync="activeId" :main-active-index.sync="activeIndex"
+                    @click-item="selectBrand" />
             </van-popup>
         </div>
         <div>
             <van-popup v-model="showCityPicker" round position="bottom">
-                <van-cascader
-                    v-model="code"
-                    title="区域选择"
-                    :options="administrative_division_codes"
-                    @close="showCityPicker = false"
-                    @finish="onFinish"
-                />
+                <van-cascader v-model="code" title="区域选择" :options="administrative_division_codes"
+                    @close="showCityPicker = false" @finish="onFinish" />
             </van-popup>
         </div>
     </div>
@@ -210,6 +191,7 @@ export default {
 /deep/ .van-grid-item__content {
     padding: 8px 0px;
 }
+
 /deep/ .van-grid-item__text {
     font-size: 0.65rem;
 }
