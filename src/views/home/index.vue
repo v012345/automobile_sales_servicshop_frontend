@@ -520,6 +520,7 @@ export default {
                 }).then((response) => {
                     Toast.clear();
                     this.$store.dispatch("init", response.data);
+                    this.$router.push('/coupons');
                 })
             }
         });
