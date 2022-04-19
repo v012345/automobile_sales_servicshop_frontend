@@ -48,7 +48,7 @@
             </van-popup>
         </div>
         <div class="footer-nav">
-            <van-button type="info" block @click="$router.back()">返回首页 <br><span class="sales_number">已有人{{
+            <van-button type="info" block @click="back">返回首页 <br><span class="sales_number">已有人{{
                 activity.sales_number
             }}参与</span>
             </van-button>
@@ -115,6 +115,20 @@ export default {
         },
     },
     methods: {
+        back() {
+            // console.log(window.history.length);
+            // return;
+            if (window.history.length >= 2) {
+                this.$router.back()
+            } else {
+                if (this.activity.id) {
+                    this.$router.push(`activity/${this.activity.id}`)
+                } else {
+                    this.$router.push("/")
+                }
+            }
+
+        },
         dealWithTheCoupon(coupon) {
             if (coupon.state == "available") {
                 this.qrcode = this.$qrcode.getQrBase64(coupon.id.toString());
