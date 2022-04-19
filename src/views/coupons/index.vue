@@ -118,6 +118,8 @@ export default {
         back() {
             // console.log(this.$router)
             // Toast({ message: window.history.length });
+            if (window.history.length > 2)
+                this.$router.back()
             this.$router.replace(`activity/${this.activity.id}`)
 
         },
