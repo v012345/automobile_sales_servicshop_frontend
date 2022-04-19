@@ -117,15 +117,20 @@ export default {
     methods: {
         back() {
             // Toast({ message: window.history.length });
-            if (window.history.length <= 1) {
-                if (this.activity.id) {
-                    this.$router.push(`activity/${this.activity.id}`)
+            try {
+                if (window.history.length <= 1) {
+                    if (this.activity.id) {
+                        this.$router.push(`activity/${this.activity.id}`)
+                    } else {
+                        this.$router.push("/")
+                    }
                 } else {
-                    this.$router.push("/")
+                    this.$router.back()
                 }
-            } else {
-                this.$router.back()
+            } catch (e) {
+                this.$router.push(`activity/${this.activity.id}`)
             }
+
         },
         dealWithTheCoupon(coupon) {
             if (coupon.state == "available") {
