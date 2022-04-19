@@ -53,11 +53,12 @@
             }}参与</span>
             </van-button>
             <div class="middle-button">
-                <van-button type="danger" @click="showOfficialAccountQrcode = true" size="large" block>关注公众号<br>获取更多好礼
+                <van-button type="danger" @click="showOfficialAccountQrcode = true" size="large" block>
+                    <span v-html="activityConfig.my_coupon_middle_button"> </span>
                 </van-button>
             </div>
-
-            <van-button type="info" block @click="generatePoster">分享活动海报<br>获取活动奖品</van-button>
+            <van-button type="info" block @click="generatePoster"><span v-html="activityConfig.my_coupon_right_button">
+                </span></van-button>
         </div>
     </div>
 </template>

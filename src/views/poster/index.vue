@@ -4,9 +4,7 @@
             <van-image :src="myPoster.src" />
         </div>
         <div>
-            <p>
-                工工工工工工工
-            </p>
+            <p v-html="activityConfig.poster_desc"></p>
         </div>
     </div>
 </template>
