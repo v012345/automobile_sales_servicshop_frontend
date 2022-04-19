@@ -116,20 +116,9 @@ export default {
     },
     methods: {
         back() {
-            Toast({ message: window.history.length });
-            try {
-                if (window.history.length <= 1) {
-                    if (this.activity.id) {
-                        this.$router.push(`activity/${this.activity.id}`)
-                    } else {
-                        this.$router.push("/")
-                    }
-                } else {
-                    this.$router.back()
-                }
-            } catch (e) {
-                this.$router.push(`activity/${this.activity.id}`)
-            }
+            // console.log(this.$router)
+            // Toast({ message: window.history.length });
+            this.$router.replace(`activity/${this.activity.id}`)
 
         },
         dealWithTheCoupon(coupon) {
