@@ -398,6 +398,10 @@ export default {
                             duration: 0,
                         });
                     },
+                    cancel: () => {
+                        this.isPaying = false;
+                        Toast({ message: "已取消支付" })
+                    }
                 });
             }).catch((error) => {
                 this.isPaying = false;
