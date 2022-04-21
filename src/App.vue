@@ -125,8 +125,8 @@ export default {
     }
 
     let config = {
-      title: `${this.user.name}向您分享${this.activity.title}`,
-      desc: this.activity.description,
+      title: `${this.activity.title}`,
+      desc: `${this.user.name}: ` + this.activity.description,
       link:
         window.location.origin +
         `/activity/${this.activity.id}/inviter/${this.user.id}`,
