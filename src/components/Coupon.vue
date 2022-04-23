@@ -14,10 +14,10 @@
       </div>
       <div class="right_button">
         <template v-if="available">
-          <van-button type="danger"><span class="text1">点击生成二维码</span> </van-button>
+          <van-button type="danger"><span class="text1">点击生成<br>二维码</span> </van-button>
         </template>
         <template v-else>
-          <van-button disabled><span class="text2">通过海报邀请好友,激活此券</span> </van-button>
+          <van-button disabled><span class="text2">通过海报<br>邀请好友<br>激活此券</span> </van-button>
         </template>
 
       </div>
