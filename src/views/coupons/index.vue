@@ -11,7 +11,7 @@
                     <div v-for="coupon in sharedCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
                         <Coupon :value="activityConfig.shared_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at" :description="activityConfig.shared_coupon_description"
-                            :available="coupon.state == 'available'"></Coupon>
+                            :available="coupon.state == 'available'" :type="coupon.type"></Coupon>
                     </div>
                 </van-tab>
                 <!-- <van-tab title="分享的" name="shared">
