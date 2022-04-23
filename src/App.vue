@@ -130,7 +130,8 @@ export default {
       link:
         window.location.origin +
         `/activity/${this.activity.id}/inviter/${this.user.id}`,
-      imgUrl: this.$backend + this.activity.poster,
+      // imgUrl: this.$backend + this.activity.poster,
+      imgUrl: this.$backend + "/storage/20220423/D3Pl342bgoyiltNRZPGZ2Z3o9x42VvCjJZlfTkwC.png",
     };
     // this.$wx.updateAppMessageShareData(config);
     this.$wx.updateTimelineShareData(config);
