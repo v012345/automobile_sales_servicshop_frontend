@@ -21,7 +21,7 @@
                             :available="coupon.state == 'available'"></Coupon>
                     </div>
                 </van-tab> -->
-                <van-tab title="失效的" name="expired">
+                <van-tab title="失效的" name="expired" v-if="false">
                     <div v-for="coupon in expiredCoupons" :key="coupon.id">
                         <template v-if="coupon.type == 'normal'">
                             <Coupon :value="activityConfig.normal_coupon_value"
