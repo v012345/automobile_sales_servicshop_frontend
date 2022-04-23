@@ -24,7 +24,7 @@
           <van-button type="danger"><span class="text1">已生效</span> </van-button>
         </template>
         <template v-else>
-          <van-button disabled><span class="text1">未生效</span> </van-button>
+          <van-button color="#cfcfcf" disabled><span class="text1">未生效</span> </van-button>
         </template>
 
       </div>
