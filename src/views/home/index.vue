@@ -35,6 +35,12 @@
                     @click="showCarModelPicker = true" />
             </template>
         </van-form>
+        <div class="contract">
+            <input type="checkbox" v-model="checked">
+            <span style="font-size:0.8rem">请阅读相关"<span @click="showContract" style="color:darkblue">活动条款</span>"</span>
+
+        </div>
+
         <div class="count-down">
             <img src="@/assets/countdown.png" />
             <div class="text">
@@ -240,6 +246,7 @@ export default {
     name: "Home",
     data() {
         return {
+            checked: false,
             flags: {},
             showCarModelPicker: false,
             cascaderValue: '',
@@ -321,6 +328,14 @@ export default {
         },
     },
     methods: {
+        showContract() {
+            Dialog.alert({
+                title: '购买条款',
+                message: '1.11111<br>2.22222<br>3.3333',
+            }).then(() => {
+                // on close
+            });
+        },
         log(n) { console.log(n) },
         onFinish({ selectedOptions }) {
             this.showCarModelPicker = false;
@@ -362,6 +377,13 @@ export default {
                     return;
                 }
             }
+
+
+            if (!this.checked) {
+                Toast({ message: "请先阅读并相意活动条款" });
+                return
+            }
+
             Toast.loading({
                 message: "请求支付中",
                 forbidClick: true,
@@ -665,6 +687,11 @@ export default {
 
 .activity-desc {
     margin-top: 1rem;
+}
+
+.contract {
+    display: flex;
+    justify-content: center;
 }
 </style>
 
