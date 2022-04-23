@@ -131,7 +131,7 @@ export default {
         window.location.origin +
         `/activity/${this.activity.id}/inviter/${this.user.id}`,
       // imgUrl: this.$backend + this.activity.poster,
-      imgUrl: this.$backend + "/storage/20220423/D3Pl342bgoyiltNRZPGZ2Z3o9x42VvCjJZlfTkwC.png",
+      imgUrl: this.$backend + "/storage/20220423/bqyBJR4WBeTl2A334vTbYOslhn8A4PsthoNNSqIs.png",
     };
     // this.$wx.updateAppMessageShareData(config);
     this.$wx.updateTimelineShareData(config);

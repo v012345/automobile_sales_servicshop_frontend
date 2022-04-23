@@ -35,11 +35,7 @@
                     @click="showCarModelPicker = true" />
             </template>
         </van-form>
-        <div class="contract">
-            <input type="checkbox" v-model="checked">
-            <span style="font-size:0.8rem">请阅读相关"<span @click="showContract" style="color:darkblue">活动条款</span>"</span>
 
-        </div>
 
         <div class="count-down">
             <img src="@/assets/countdown.png" />
@@ -56,6 +52,12 @@
                     <div>下一场活动马上开启</div>
                 </template>
             </div>
+        </div>
+
+        <div class="contract">
+            <input type="checkbox" v-model="checked">
+            <span style="font-size:0.8rem">请阅读相关"<span @click="showContract" style="color:darkblue">活动条款</span>"</span>
+
         </div>
 
         <template v-if="activity.id">
@@ -330,8 +332,8 @@ export default {
     methods: {
         showContract() {
             Dialog.alert({
-                title: '购买条款',
-                message: '1.11111<br>2.22222<br>3.3333',
+                title: '用户购买须知',
+                message: '1.机油仅限店内使用,机油升级或者超过4升,需要补差价<br>2.本活动不得与店内其他优惠同时使用<br>3.销售套餐由合作4S店提供,并由该店提供正规专业的保养服务<br>4.为回馈广大车主,套餐为特价福利产品,购买后不可退款<br><br>购买前请认真阅读本"须知",如有异议请咨询详情页面4S店服务电话',
             }).then(() => {
                 // on close
             });
