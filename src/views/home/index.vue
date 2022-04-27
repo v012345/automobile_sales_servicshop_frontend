@@ -1,6 +1,6 @@
 <template>
     <div>
-        <template v-if="activity.id">
+        <template v-if="activity.id && false">
             <video preload="auto" width="100%" height="300" controls="controls" x5-video-player-fullscreen="false"
                 x5-playsinline playsinline webkit-playsinline="true" :poster="$backend + activity.video_thumbnail">
                 <source :src="$backend + activity.video" type="video/mp4" />
@@ -94,35 +94,35 @@
 
                                     <div class="name" style="margin-right: 0.5rem;">
                                         {{
-                                            normalCoupons.coupons[
-                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                            ].participant.participant_info.name
+                                                normalCoupons.coupons[
+                                                    (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                                ].participant.participant_info.name
                                         }}
                                     </div>
                                     <div class="license_plate_number" style="margin-right: 0.5rem" v-if="activityConfig.show_license_plate_number_field && normalCoupons.coupons[
                                         (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
                                     ].participant.license_plate_number">
                                         {{
-                                            normalCoupons.coupons[
-                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                            ].participant.license_plate_number.replace(
-                                                RegExp("^(...)(.*)(..)$"),
-                                                "$1**$3"
-                                            )
+                                                normalCoupons.coupons[
+                                                    (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                                ].participant.license_plate_number.replace(
+                                                    RegExp("^(...)(.*)(..)$"),
+                                                    "$1**$3"
+                                                )
                                         }}
                                     </div>
                                     <div style="margin-right: 0.5rem">
                                         {{
-                                            normalCoupons.coupons[
-                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                            ].created_at
+                                                normalCoupons.coupons[
+                                                    (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                                ].created_at
                                         }}
                                     </div>
                                     <div>
                                         支付{{
-                                            normalCoupons.coupons[
-                                                (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
-                                            ].value
+                                                normalCoupons.coupons[
+                                                    (i * 2 - (j % 2) - 1) % normalCoupons.coupons.length
+                                                ].value
                                         }}元
                                     </div>
                                 </div>
@@ -191,7 +191,7 @@
                         <div class="activity-desc">
                             <h3>参与记录</h3>
                             <div v-if="haveACoupon && availableCoupons.length > 0">{{
-                                availableCoupons[0].created_at
+                                    availableCoupons[0].created_at
                             }}参加活动</div>
                             <div v-else>未参加</div>
                         </div>
