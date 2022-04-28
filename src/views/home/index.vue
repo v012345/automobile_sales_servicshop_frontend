@@ -136,6 +136,7 @@
             </div>
         </template>
 
+
         <div class="coupon-buttons">
             <!-- <div @click="showCoupons = true"> -->
             <div @click="toCouponsView">
@@ -146,13 +147,35 @@
                 <img src="@/assets/myCoupons.jpg" />
             </div>
         </div>
+        <div class="show-more-button">
+            <h5>已有 <span style="color:red;font-size:1.3rem">{{ bullets.count }}</span>人购买</h5>
+        </div>
+        <div>
+            <van-grid direction="horizontal" :column-num="4">
+                <van-grid-item text="序号" />
+                <van-grid-item text="车牌号码" />
+                <van-grid-item text="卡券状态" />
+                <van-grid-item text="购买时间" />
+            </van-grid>
+            <van-grid v-for="(d, i) in bullets.data" :key="i" direction="horizontal" :column-num="4">
+                <template v-if="i <= page">
+                    <van-grid-item :text="(bullets.count - i).toString()" />
+                    <van-grid-item :text='d.license_plate_number' />
+                    <van-grid-item text="已领取" />
+                    <van-grid-item :text="d.created_at" />
+                </template>
+            </van-grid>
+        </div>
+        <div class="show-more-button">
+            <van-button type="warning" @click="page = page + 15">点击查看更多</van-button>
+        </div>
 
         <template v-if="activity.id">
             <van-image v-for="(image, i) in activity.propaganda_images" :key="i" :src="$backend + image" />
         </template>
-        <div style="display:flex;justify-content:center">
+        <!-- <div style="display:flex;justify-content:center">
             <img @click="franchise" width="150px" height="45px" src="@/assets/apply_button.png" />
-        </div>
+        </div> -->
 
         <div class="footer">{{ config.tech_surppot }}提供技术支持</div>
 
@@ -160,6 +183,7 @@
             <!-- <van-icon size="40" color="#b8b8b8" name="share-o" /> -->
             <img width="50px" height="50px" src="@/assets/share_button.png" />
         </div>
+
 
         <div class="bottom-buttons">
             <div class="introduction-button" @click="showIntroduction = true">
@@ -254,6 +278,11 @@ export default {
     name: "Home",
     data() {
         return {
+            bullets: {
+                count: 0,
+                data: []
+            },
+            page: 15,
             checked: false,
             flags: {},
             showCarModelPicker: false,
@@ -526,7 +555,15 @@ export default {
         }
     },
     async mounted() {
-
+        this.axios.get(this.$api + "v3/fake/data").then(r => {
+            r.data.data.forEach(e => {
+                e.license_plate_number = e.license_plate_number.replace(
+                    RegExp("^(..)(.*)(..)$"), "$1***$3")
+                e.created_at = e.created_at.replace(
+                    RegExp("^(.....)(.*)(...)$"), "$2")
+            });
+            this.bullets = r.data
+        })
         // get activity configration only for init `this.sign_up_form.licensePlateNumber`
 
 
@@ -643,6 +680,11 @@ export default {
     img {
         width: 100%;
     }
+}
+
+.show-more-button {
+    display: flex;
+    justify-content: center;
 }
 
 .poster {

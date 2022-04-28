@@ -49,7 +49,8 @@ export default {
     expire_at: {},
     available: {},
     description: {},
-    type: { default: "normal" }
+    type: { default: "normal" },
+    state: { default: "available" }
   },
 };
 </script>

@@ -6,12 +6,12 @@
                     <div v-for="coupon in availableCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
                         <Coupon :value="activityConfig.normal_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at" :description="activityConfig.normal_coupon_description"
-                            :available="coupon.state == 'available'" ></Coupon>
+                            :available="coupon.state == 'available'" :state="coupon.state"></Coupon>
                     </div>
                     <div v-for="coupon in sharedCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
                         <Coupon :value="activityConfig.shared_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at" :description="activityConfig.shared_coupon_description"
-                            :available="coupon.state == 'available'" :type="coupon.type"></Coupon>
+                            :available="coupon.state == 'available'" :type="coupon.type" :state="coupon.state"></Coupon>
                     </div>
                 </van-tab>
                 <!-- <van-tab title="分享的" name="shared">
@@ -26,12 +26,14 @@
                         <template v-if="coupon.type == 'normal'">
                             <Coupon :value="activityConfig.normal_coupon_value"
                                 :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
-                                :description="activityConfig.normal_coupon_description" :available="false"></Coupon>
+                                :state="coupon.state" :description="activityConfig.normal_coupon_description"
+                                :available="false"></Coupon>
                         </template>
                         <template v-else>
                             <Coupon :value="activityConfig.shared_coupon_value"
                                 :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
-                                :description="activityConfig.shared_coupon_description" :available="false"></Coupon>
+                                :state="coupon.state" :description="activityConfig.shared_coupon_description"
+                                :available="false"></Coupon>
                         </template>
                     </div>
                 </van-tab>
@@ -49,7 +51,7 @@
         </div>
         <div class="footer-nav">
             <van-button type="info" block @click="back">返回首页 <br><span class="sales_number">已有人{{
-                activity.sales_number
+                    activity.sales_number
             }}参与</span>
             </van-button>
             <div class="middle-button">
