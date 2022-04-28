@@ -6,7 +6,7 @@
                     <div v-for="coupon in availableCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
                         <Coupon :value="activityConfig.normal_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
                             :expire_at="activity.expire_at" :description="activityConfig.normal_coupon_description"
-                            :available="coupon.state == 'available'"></Coupon>
+                            :available="coupon.state == 'available'" ></Coupon>
                     </div>
                     <div v-for="coupon in sharedCoupons" @click="dealWithTheCoupon(coupon)" :key="coupon.id">
                         <Coupon :value="activityConfig.shared_coupon_value" :allow_to_use_at="activity.allow_to_use_at"
