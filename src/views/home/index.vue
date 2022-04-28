@@ -213,13 +213,16 @@
                             </div>
                         </template>
                     </van-tab>
-                    <van-tab title="我的奖品">
-                        <div v-for="coupon in availableCoupons" :key="coupon.id" @click="toCouponsView">
-                            <Coupon :value="activityConfig.normal_coupon_value"
-                                :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
-                                :description="activityConfig.normal_coupon_description" :available="true"></Coupon>
-                        </div>
-                    </van-tab>
+                    <template v-if="false">
+                        <van-tab title="我的奖品">
+                            <div v-for="coupon in availableCoupons" :key="coupon.id" @click="toCouponsView">
+                                <Coupon :value="activityConfig.normal_coupon_value"
+                                    :allow_to_use_at="activity.allow_to_use_at" :expire_at="activity.expire_at"
+                                    :description="activityConfig.normal_coupon_description" :available="true"></Coupon>
+                            </div>
+                        </van-tab>
+                    </template>
+
                 </van-tabs>
             </van-popup>
         </div>
