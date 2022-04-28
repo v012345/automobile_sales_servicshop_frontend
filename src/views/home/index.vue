@@ -150,7 +150,7 @@
         <div class="show-more-button">
             <h5>已有 <span style="color:red;font-size:1.3rem">{{ bullets.count }}</span>人购买</h5>
         </div>
-        <div>
+        <div class="no-line">
             <van-grid direction="horizontal" :column-num="4">
                 <van-grid-item text="序号" />
                 <van-grid-item text="车牌号码" />
@@ -704,6 +704,12 @@ export default {
     border-radius: 50%;
     right: 10px;
     // background-color: rgba(0, 0, 0, 0.397);
+}
+
+.no-line {
+    /deep/ [class*=van-hairline]::after {
+        border: none;
+    }
 }
 
 .footer {
