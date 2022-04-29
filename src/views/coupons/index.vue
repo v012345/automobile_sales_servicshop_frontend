@@ -51,7 +51,7 @@
         </div>
         <div class="footer-nav">
             <van-button type="info" block @click="back">返回首页 <br><span class="sales_number">已有人{{
-                    activity.sales_number
+                    activity.sales_number + activity.offset.coupons
             }}参与</span>
             </van-button>
             <div class="middle-button">
