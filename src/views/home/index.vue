@@ -59,7 +59,7 @@
 
         <div class="contract">
             <input type="checkbox" v-model="checked">
-            <span style="font-size:0.8rem">请阅读相关"<span @click="showContract" style="color:darkblue">活动条款</span>"</span>
+            <span style="font-size:0.8rem">已阅读相关"<span @click="showContract" style="color:darkblue">活动条款</span>"</span>
 
         </div>
 
@@ -418,7 +418,7 @@ export default {
 
 
             if (!this.checked) {
-                Toast({ message: "请先阅读并相意活动条款" });
+                Toast({ message: "请先阅读并相关活动条款" });
                 return
             }
 
