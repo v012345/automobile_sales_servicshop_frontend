@@ -553,17 +553,33 @@ export default {
         } catch (err) {
             console.log("no activity config")
         }
+        try {
+            this.axios.get(this.$api + "v3/bulletin/" + localStorage.activityId).then(r => {
+                r.data.data.forEach(e => {
+                    e.license_plate_number = e.license_plate_number.replace(
+                        RegExp("^(..)(.*)(..)$"), "$1***$3")
+                    e.created_at = e.created_at.replace(
+                        RegExp("^(.....)(.*)(...)$"), "$2")
+                });
+                this.bullets = r.data
+            })
+        }
+        catch (err) {
+            console.log("missing localStorage.activityId")
+        }
     },
     async mounted() {
-        this.axios.get(this.$api + "v3/fake/data").then(r => {
-            r.data.data.forEach(e => {
-                e.license_plate_number = e.license_plate_number.replace(
-                    RegExp("^(..)(.*)(..)$"), "$1***$3")
-                e.created_at = e.created_at.replace(
-                    RegExp("^(.....)(.*)(...)$"), "$2")
-            });
-            this.bullets = r.data
-        })
+        // this.axios.get(this.$api + "v3/fake/data").then(r => {
+        //     r.data.data.forEach(e => {
+        //         e.license_plate_number = e.license_plate_number.replace(
+        //             RegExp("^(..)(.*)(..)$"), "$1***$3")
+        //         e.created_at = e.created_at.replace(
+        //             RegExp("^(.....)(.*)(...)$"), "$2")
+        //     });
+        //     this.bullets = r.data
+        // })
+
+
         // get activity configration only for init `this.sign_up_form.licensePlateNumber`
 
 
