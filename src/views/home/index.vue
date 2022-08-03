@@ -1,15 +1,15 @@
 <template>
     <div>
         <template v-if="activity.id">
-            <template v-if="false">
-                <video preload="auto" width="100%" height="300" controls="controls" x5-video-player-fullscreen="false"
-                    x5-playsinline playsinline webkit-playsinline="true" :poster="$backend + activity.video_thumbnail">
-                    <source :src="$backend + activity.video" type="video/mp4" />
-                </video>
+            <template v-if="true">
+                <template v-if="activity.video != '/storage/default_video.mp4'">
+                    <video preload="auto" width="100%" height="300" controls="controls" x5-video-player-fullscreen="false"
+                        x5-playsinline playsinline webkit-playsinline="true" :poster="$backend + activity.video_thumbnail">
+                        <source :src="$backend + activity.video" type="video/mp4" />
+                    </video>
+                </template>
             </template>
-
-
-            <van-image width="100vw" fit="cover" :src="$backend + activity.poster" />
+                <van-image width="100vw" fit="cover" :src="$backend + activity.poster" />
         </template>
 
         <van-form>
